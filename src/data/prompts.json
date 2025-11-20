@@ -42,7 +42,8 @@
     "usageCount": 412,
     "executionCount": 203,
     "createdAt": "2024-08-22T09:15:00Z",
-    "updatedAt": "2024-08-22T09:15:00Z"
+    "updatedAt": "2024-08-22T09:15:00Z",
+    "featured": true
   },
   {
     "id": "4",
@@ -87,7 +88,8 @@
     "usageCount": 523,
     "executionCount": 234,
     "createdAt": "2024-08-10T08:20:00Z",
-    "updatedAt": "2024-08-10T08:20:00Z"
+    "updatedAt": "2024-08-10T08:20:00Z",
+    "featured": true
   },
   {
     "id": "7",
@@ -132,7 +134,8 @@
     "usageCount": 391,
     "executionCount": 187,
     "createdAt": "2024-09-20T15:10:00Z",
-    "updatedAt": "2024-09-20T15:10:00Z"
+    "updatedAt": "2024-09-20T15:10:00Z",
+    "featured": true
   },
   {
     "id": "10",
@@ -207,7 +210,8 @@
     "usageCount": 445,
     "executionCount": 218,
     "createdAt": "2024-08-25T09:30:00Z",
-    "updatedAt": "2024-08-25T09:30:00Z"
+    "updatedAt": "2024-08-25T09:30:00Z",
+    "featured": true
   },
   {
     "id": "15",
@@ -312,7 +316,8 @@
     "usageCount": 387,
     "executionCount": 192,
     "createdAt": "2024-08-28T09:40:00Z",
-    "updatedAt": "2024-08-28T09:40:00Z"
+    "updatedAt": "2024-08-28T09:40:00Z",
+    "featured": true
   },
   {
     "id": "22",
@@ -402,7 +407,8 @@
     "usageCount": 428,
     "executionCount": 211,
     "createdAt": "2024-09-11T10:15:00Z",
-    "updatedAt": "2024-09-11T10:15:00Z"
+    "updatedAt": "2024-09-11T10:15:00Z",
+    "featured": true
   },
   {
     "id": "28",

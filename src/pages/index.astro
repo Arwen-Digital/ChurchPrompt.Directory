@@ -26,8 +26,11 @@ const iconMap: Record<string, any> = {
   GraduationCap,
 };
 
-// Get featured prompts (first 6)
-const featuredPrompts = prompts.slice(0, 6).map(p => ({
+// Get featured prompts based on the 'featured' flag (max 6)
+const featuredPrompts = prompts
+  .filter((p) => p.featured)
+  .slice(0, 6)
+  .map((p) => ({
   id: p.id,
   title: p.title,
   excerpt: p.excerpt,
@@ -55,9 +58,9 @@ const featuredPrompts = prompts.slice(0, 6).map(p => ({
           AI Prompts for Church Ministry
         </h1>
         <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Discover, share, and utilize proven AI prompts designed specifically for church leaders, pastors, and ministry staff. Save time and enhance your ministry with community-driven content.
+          Discover, share, and utilize proven AI prompts designed specifically for church leaders, pastors, and ministry staff. 
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+       <!-- <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <Button size="lg" asChild>
             <a href="/directory">
               Browse Prompts
@@ -67,10 +70,10 @@ const featuredPrompts = prompts.slice(0, 6).map(p => ({
           <Button size="lg" variant="outline" asChild>
             <a href="/subscribe">Subscribe for Full Access</a>
           </Button>
-        </div>
-        <p class="text-sm text-muted-foreground pt-2">
+        </div> -->
+        <!-- <p class="text-sm text-muted-foreground pt-2">
           Free account: Browse and copy all prompts • Subscribed: Run prompts in-app with AI
-        </p>
+        </p>-->
       </div>
     </div>
   </section>

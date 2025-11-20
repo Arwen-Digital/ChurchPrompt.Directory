@@ -35,7 +35,7 @@ export default function Header({
         {/* Logo */}
         <div className="flex items-center gap-2">
           <a href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">Church Prompts</span>
+            <span className="text-xl font-bold">ChurchPrompt.Directory</span>
           </a>
         </div>
 

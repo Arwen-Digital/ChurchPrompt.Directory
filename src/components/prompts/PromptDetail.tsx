@@ -18,6 +18,7 @@ interface PromptDetailProps {
     usageCount: number;
     executionCount: number;
     createdAt: string;
+    featured?: boolean;
   };
   onCopy?: () => void;
   onSave?: () => void;
@@ -73,6 +74,11 @@ export default function PromptDetail({
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Badge variant="secondary">{categoryDisplay}</Badge>
+          {prompt.featured && (
+            <Badge variant="default" className="ml-2">
+              Featured
+            </Badge>
+          )}
           <span className="text-sm text-muted-foreground">
             by {prompt.authorName}
           </span>
