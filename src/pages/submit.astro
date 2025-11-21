@@ -1,6 +1,6 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
-import { SubmissionForm } from '@/components/prompts/SubmissionForm';
+import { SubmissionFormWithProvider } from '@/components/prompts/SubmissionFormWithProvider';
 
 import categoriesData from '@/data/categories.json';
 
@@ -8,6 +8,14 @@ const categories = categoriesData.map(cat => ({
   id: cat.id,
   name: cat.name
 }));
+
+const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
+
+if (!convexUrl) {
+  throw new Error('PUBLIC_CONVEX_URL is not set');
+}
+
+export const prerender = false;
 ---
 
 <MainLayout title="Submit a Prompt | Church Prompt Directory">
@@ -19,6 +27,10 @@ const categories = categoriesData.map(cat => ({
       </p>
     </div>
     
-    <SubmissionForm client:load categories={categories} />
+    <SubmissionFormWithProvider 
+      client:only="react"
+      convexUrl={convexUrl}
+      categories={categories} 
+    />
   </div>
 </MainLayout>

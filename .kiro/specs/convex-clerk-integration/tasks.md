@@ -214,7 +214,7 @@
   - [ ] Style Clerk components to match app design
   - _Requirements: 2.1, 2.3, 2.4_
 
-- [ ] 21. Implement prompt sorting by popularity
+- [x] 21. Implement prompt sorting by popularity
   - Add sort parameter to `getApprovedPrompts` query
   - Implement sorting by usageCount descending
   - Add UI controls for sort selection

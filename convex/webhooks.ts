@@ -54,6 +54,7 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
     const type: string = evt?.type ?? "";
     const data: any = evt?.data ?? {};
     const clerkId: string | undefined = data?.id;
+    console.log(`[clerk.webhook] received type=${type} clerkId=${clerkId}`);
 
     if (!clerkId) {
       return new Response("Missing user id", { status: 400 });
@@ -67,6 +68,7 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
         name,
         email,
       });
+      console.log(`[clerk.webhook] user.created persisted clerkId=${clerkId}`);
     } else if (type === "user.updated") {
       const email = extractPrimaryEmail(data) ?? undefined;
       const name = buildName(data);
@@ -75,14 +77,18 @@ export const handleClerkWebhook = httpAction(async (ctx, request) => {
         name,
         email,
       });
+      console.log(`[clerk.webhook] user.updated patched clerkId=${clerkId}`);
     } else if (type === "user.deleted") {
       await ctx.runMutation(internal.users.deleteUser, { clerkId });
+      console.log(`[clerk.webhook] user.deleted removed clerkId=${clerkId}`);
     } else {
       // Ignore unrelated events
+      console.log(`[clerk.webhook] ignored event type=${type}`);
     }
 
     return new Response("ok", { status: 200 });
   } catch (err: any) {
+    console.error(`[clerk.webhook] error processing event`, err);
     return new Response("Webhook processing error", { status: 500 });
   }
 });

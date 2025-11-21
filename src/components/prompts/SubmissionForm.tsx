@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import { useMutation } from 'convex/react';
+import { useAuth } from '@clerk/astro/react';
+import { api } from '../../../convex/_generated/api';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, CheckCircle2, X } from 'lucide-react';
+import { Loader2, CheckCircle2, X, AlertCircle } from 'lucide-react';
 
 interface Category {
   id: string;
@@ -30,6 +33,10 @@ export const SubmissionForm: React.FC<SubmissionFormProps> = ({ categories }) =>
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState<string>('');
+
+  const { userId, isLoaded } = useAuth();
+  const createPrompt = useMutation(api.prompts.createPrompt);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -88,24 +95,40 @@ export const SubmissionForm: React.FC<SubmissionFormProps> = ({ categories }) =>
       return;
     }
 
+    if (!isLoaded || !userId) {
+      setSubmitError('You must be signed in to submit a prompt');
+      return;
+    }
+
     setIsSubmitting(true);
+    setSubmitError('');
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      await createPrompt({
+        title: title.trim(),
+        content: content.trim(),
+        category,
+        tags,
+      });
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      setIsSuccess(true);
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setTitle('');
-      setContent('');
-      setCategory('');
-      setTags([]);
-      setTagsInput('');
-      setErrors({});
-      setIsSuccess(false);
-    }, 3000);
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setTitle('');
+        setContent('');
+        setCategory('');
+        setTags([]);
+        setTagsInput('');
+        setErrors({});
+        setIsSuccess(false);
+      }, 3000);
+    } catch (error) {
+      console.error('Failed to submit prompt:', error);
+      setSubmitError(error instanceof Error ? error.message : 'Failed to submit prompt. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isSuccess) {
@@ -132,6 +155,14 @@ export const SubmissionForm: React.FC<SubmissionFormProps> = ({ categories }) =>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Error Alert */}
+          {submitError && (
+            <div className="flex items-center gap-2 p-3 rounded-md bg-red-50 border border-red-200">
+              <AlertCircle className="h-4 w-4 text-red-600" />
+              <p className="text-sm text-red-600">{submitError}</p>
+            </div>
+          )}
+
           {/* Title Field */}
           <div className="space-y-2">
             <label htmlFor="title" className="text-sm font-medium">

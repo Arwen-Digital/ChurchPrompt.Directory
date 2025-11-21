@@ -1,22 +1,23 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X, User } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Menu, X, User, Shield } from "lucide-react";
 import { useState } from "react";
-import { SignOutButton } from "@clerk/astro/react";
+import { SignOutButton, useAuth } from "@clerk/astro/react";
 
 interface HeaderProps {
-  isAuthenticated?: boolean;
-  isAdmin?: boolean;
-  userName?: string;
   currentPath?: string;
 }
 
 export default function Header({
-  isAuthenticated = false,
-  isAdmin = false,
-  userName = "",
   currentPath = "/",
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const auth = useAuth();
+  
+  // Derive authentication state from Clerk hooks
+  const isAuthenticated = auth.isLoaded && !!auth.userId;
+  const isAdmin = (auth.sessionClaims as any)?.metadata?.role === 'admin';
+  const userName = (auth.sessionClaims as any)?.firstName || (auth.sessionClaims as any)?.username || '';
 
   const isActivePath = (path: string) => {
     if (path === "/" && currentPath === "/") return true;
@@ -40,19 +41,13 @@ export default function Header({
           </a>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6">
-          <a href="/" className={getLinkClasses("/")}>
-            Home
-          </a>
-          <a href="/directory" className={getLinkClasses("/directory")}>
-            Directory
-          </a>
-          <a href="/subscribe" className={getLinkClasses("/subscribe")}>
-            Pricing
-          </a>
-          {isAuthenticated && (
+        {/* Desktop Navigation - Right Aligned */}
+        <div className="hidden md:flex items-center gap-6 ml-auto">
+          {isAuthenticated ? (
             <>
+              <a href="/directory" className={getLinkClasses("/directory")}>
+                Directory
+              </a>
               <a href="/submit" className={getLinkClasses("/submit")}>
                 Submit Prompt
               </a>
@@ -64,27 +59,40 @@ export default function Header({
                   Admin
                 </a>
               )}
+              <div className="flex items-center gap-3 ml-2 pl-6 border-l">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-muted-foreground">{userName}</span>
+                  {isAdmin && (
+                    <Badge variant="default" className="flex items-center gap-1">
+                      <Shield className="h-3 w-3" />
+                      Admin
+                    </Badge>
+                  )}
+                </div>
+                <SignOutButton>
+                  <Button variant="outline" size="sm">
+                    Logout
+                  </Button>
+                </SignOutButton>
+              </div>
             </>
-          )}
-        </nav>
-
-        {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-2">
-          {isAuthenticated ? (
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-muted-foreground">{userName}</span>
-              <SignOutButton>
-                <Button variant="outline" size="sm">
-                  Logout
-                </Button>
-              </SignOutButton>
-            </div>
           ) : (
-            <a href="/sign-in">
-              <Button variant="ghost" size="sm">
-                Login
-              </Button>
-            </a>
+            <>
+              <a href="/" className={getLinkClasses("/")}>
+                Home
+              </a>
+              <a href="/directory" className={getLinkClasses("/directory")}>
+                Directory
+              </a>
+              <a href="/subscribe" className={getLinkClasses("/subscribe")}>
+                Pricing
+              </a>
+              <a href="/sign-in">
+                <Button variant="ghost" size="sm">
+                  Login
+                </Button>
+              </a>
+            </>
           )}
         </div>
 
@@ -106,17 +114,11 @@ export default function Header({
       {mobileMenuOpen && (
         <div className="md:hidden border-t bg-background">
           <nav className="container py-4 flex flex-col gap-3">
-            <a href="/" className={`${getLinkClasses("/")} py-2`}>
-              Home
-            </a>
-            <a href="/directory" className={`${getLinkClasses("/directory")} py-2`}>
-              Directory
-            </a>
-            <a href="/subscribe" className={`${getLinkClasses("/subscribe")} py-2`}>
-              Pricing
-            </a>
-            {isAuthenticated && (
+            {isAuthenticated ? (
               <>
+                <a href="/directory" className={`${getLinkClasses("/directory")} py-2`}>
+                  Directory
+                </a>
                 <a href="/submit" className={`${getLinkClasses("/submit")} py-2`}>
                   Submit Prompt
                 </a>
@@ -129,13 +131,33 @@ export default function Header({
                   </a>
                 )}
               </>
+            ) : (
+              <>
+                <a href="/" className={`${getLinkClasses("/")} py-2`}>
+                  Home
+                </a>
+                <a href="/directory" className={`${getLinkClasses("/directory")} py-2`}>
+                  Directory
+                </a>
+                <a href="/subscribe" className={`${getLinkClasses("/subscribe")} py-2`}>
+                  Pricing
+                </a>
+              </>
             )}
             <div className="pt-3 border-t flex flex-col gap-2">
               {isAuthenticated ? (
                 <>
-                  <span className="text-sm text-muted-foreground">
-                    {userName}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">
+                      {userName}
+                    </span>
+                    {isAdmin && (
+                      <Badge variant="default" className="flex items-center gap-1">
+                        <Shield className="h-3 w-3" />
+                        Admin
+                      </Badge>
+                    )}
+                  </div>
                   <SignOutButton>
                     <Button variant="outline" size="sm" className="w-full">
                       Logout

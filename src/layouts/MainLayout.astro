@@ -3,7 +3,6 @@ import BaseLayout from "./BaseLayout.astro";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "../styles/globals.css";
-import { requireAuth } from '@/lib/auth';
 
 interface Props {
   title?: string;
@@ -16,14 +15,6 @@ const {
 } = Astro.props;
 
 const currentPath = Astro.url.pathname;
-
-// Get auth state from Clerk
-const auth = await requireAuth(Astro);
-const isAuthenticated = !!auth?.userId;
-const isAdmin = auth?.sessionClaims?.metadata?.role === 'admin';
-const userName = auth?.sessionClaims?.firstName || auth?.sessionClaims?.username || '';
-
-// Get Convex URL from environment
 ---
 
 <BaseLayout title={title} description={description}>
@@ -38,9 +29,6 @@ const userName = auth?.sessionClaims?.firstName || auth?.sessionClaims?.username
   <div class="flex min-h-screen flex-col">
     <Header
       client:load
-      isAuthenticated={isAuthenticated}
-      isAdmin={isAdmin}
-      userName={userName}
       currentPath={currentPath}
     />
     <main id="main-content" class="flex-1">

@@ -213,3 +213,52 @@ export const incrementExecutionCount = mutation({
     return { id, executionCount: next };
   },
 });
+
+// Mutation: Create a new prompt (submitted by user, requires approval)
+export const createPrompt = mutation({
+  args: {
+    title: v.string(),
+    content: v.string(),
+    category: v.string(),
+    tags: v.array(v.string()),
+  },
+  handler: async ({ db, auth }, args) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) throw new Error("Authentication required");
+
+    const { title, content, category, tags } = args;
+
+    // Generate excerpt from content (first 150 chars)
+    const excerpt = content.length > 150 
+      ? content.substring(0, 150) + '...' 
+      : content;
+
+    // Get author name from identity
+    const authorName = identity.name || identity.email?.split('@')[0] || 'Anonymous';
+
+    const promptId = await db.insert("prompts", {
+      title,
+      content,
+      excerpt,
+      category,
+      tags,
+      authorId: identity.subject, // Clerk user ID
+      authorName,
+      status: "pending", // Requires admin approval
+      usageCount: 0,
+      executionCount: 0,
+      featured: false,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    });
+
+    return { id: promptId };
+  },
+});
+
+// Mutation: Update prompt status (admin only)
+/*
+ Temporarily disabled admin-only functions to isolate deployment issue.
+ export const updatePromptStatus = mutation({ ... });
+ export const getPendingPrompts = query({ ... });
+*/

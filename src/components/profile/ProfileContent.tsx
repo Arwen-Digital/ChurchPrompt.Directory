@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import PromptCard from '@/components/prompts/PromptCard';
-import { Calendar, Mail, User, Clock, FileText, ExternalLink } from 'lucide-react';
+import { Calendar, Mail, User, Clock, FileText, ExternalLink, Shield } from 'lucide-react';
 
 export const ProfileContent: React.FC = () => {
   const { userId, isLoaded } = useAuth();
@@ -155,9 +155,21 @@ export const ProfileContent: React.FC = () => {
                 </CardDescription>
               </div>
             </div>
-            <Badge variant={currentUser.role === 'admin' ? 'default' : 'secondary'}>
-              {currentUser.role === 'admin' ? 'Administrator' : 'Member'}
-            </Badge>
+            <div className="flex flex-col items-end gap-2">
+              <Badge 
+                variant={currentUser.role === 'admin' ? 'default' : 'secondary'}
+                className={currentUser.role === 'admin' ? 'flex items-center gap-1' : ''}
+              >
+                {currentUser.role === 'admin' && <Shield className="h-3 w-3" />}
+                {currentUser.role === 'admin' ? 'Administrator' : 'Member'}
+              </Badge>
+              {currentUser.role === 'admin' && (
+                <a href="/admin" className="text-xs text-muted-foreground hover:text-primary flex items-center gap-1">
+                  <ExternalLink className="h-3 w-3" />
+                  Manage Prompts
+                </a>
+              )}
+            </div>
           </div>
         </CardHeader>
       </Card>

@@ -2,12 +2,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { Copy, Heart, Play, TrendingUp, Eye, Calendar } from "lucide-react";
+import { Copy, Heart, Play, TrendingUp, Eye, Calendar, Edit, Trash2, Shield } from "lucide-react";
 import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { ExecutionModal } from "./ExecutionModal";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@clerk/astro/react";
+import { isAdmin } from "@/lib/roleUtils";
 
 interface PromptDetailProps {
   promptId: string;
@@ -27,6 +29,13 @@ export default function PromptDetail({
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState(isFavorite);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Get current user auth state
+  const { userId } = useAuth();
+  
+  // Fetch current user from Convex to check role
+  const currentUser = useQuery(api.users.getCurrentUser);
+  const userIsAdmin = isAdmin(currentUser?.role);
 
   // Fetch prompt data from Convex
   const prompt = useQuery(api.prompts.getPromptById, { id: promptId as any });
@@ -172,15 +181,52 @@ export default function PromptDetail({
           ) : (
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="secondary" disabled>
-                  <Play className="mr-2 h-4 w-4" />
-                  Subscribe to Run
+                <Button asChild variant="secondary">
+                  <a href="/subscribe">
+                    <Play className="mr-2 h-4 w-4" />
+                    Upgrade to Run
+                  </a>
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Premium feature - Subscribe to run prompts</p>
+                <p>Subscribe to execute prompts with AI</p>
               </TooltipContent>
             </Tooltip>
+          )}
+
+          {/* Admin Actions */}
+          {userIsAdmin && (
+            <>
+              <div className="h-6 w-px bg-border" />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Edit this prompt (Admin)</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <Trash2 className="mr-2 h-4 w-4 text-destructive" />
+                    Delete
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Delete this prompt (Admin)</p>
+                </TooltipContent>
+              </Tooltip>
+              
+              <Badge variant="default" className="flex items-center gap-1">
+                <Shield className="h-3 w-3" />
+                Admin View
+              </Badge>
+            </>
           )}
         </div>
       </TooltipProvider>
