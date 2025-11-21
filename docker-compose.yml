@@ -1,5 +1,4 @@
 services:
-services:
   web:
     build: .
     image: church-prompt-directory:latest
