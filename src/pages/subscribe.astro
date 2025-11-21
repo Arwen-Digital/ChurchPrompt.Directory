@@ -20,6 +20,149 @@ import {
   description="Get early access to exclusive features and unlock the full potential of Church Prompt Directory."
 >
   <div class="relative overflow-hidden">
+
+        <!-- Free vs Premium Comparison -->
+    <div class="container py-20 border-t">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Free vs Premium</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          Start with our free plan and upgrade when you're ready for advanced features.
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Free Plan -->
+          <Card className="border-2">
+            <CardContent className="pt-8 pb-8">
+              <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold mb-2">Free Forever</h3>
+                <div class="mb-2">
+                  <span class="text-5xl font-bold">$0</span>
+                </div>
+                <p class="text-muted-foreground">Perfect to get started</p>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-start gap-3">
+                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                  <span class="text-sm">Browse all approved prompts</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                  <span class="text-sm">Search and filter by category</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                  <span class="text-sm">Submit your own prompts</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                  <span class="text-sm">Copy prompts to clipboard</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                  <span class="text-sm">View up to 10 prompts per session</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                  <span class="text-sm text-muted-foreground">AI execution engine</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                  <span class="text-sm text-muted-foreground">Save favorites & bookmarks</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                  <span class="text-sm text-muted-foreground">Execution history</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                  <span class="text-sm text-muted-foreground">Exclusive premium prompts</span>
+                </div>
+                <div class="flex items-start gap-3">
+                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
+                  <span class="text-sm text-muted-foreground">Priority support</span>
+                </div>
+              </div>
+
+              <a href="/directory" class={buttonVariants({ variant: 'outline', className: 'w-full mt-6' })}>
+                Browse Free Prompts
+              </a>
+            </CardContent>
+          </Card>
+
+          <!-- Premium Plan -->
+          <Card className="border-2 border-primary shadow-lg relative">
+            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+              <Badge className="bg-primary text-primary-foreground px-4 py-1">
+                Coming Soon
+              </Badge>
+            </div>
+            
+            <CardContent className="pt-8 pb-8">
+              <div class="text-center mb-6">
+                <h3 class="text-2xl font-bold mb-2">Premium</h3>
+                <div class="mb-2">
+                  <!-- <span class="text-5xl font-bold">$19</span> -->
+                  <!-- <span class="text-muted-foreground ml-2">/ month</span> -->
+                </div>
+                <p class="text-muted-foreground">For power users and church ministry teams</p>
+              </div>
+
+              <div class="space-y-3">
+                <div class="flex items-start gap-3">
+                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                  <span class="text-sm font-medium">Everything in Free, plus:</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Unlimited prompt views</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">AI execution engine built-in</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Save unlimited favorites</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Full execution history</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Access to exclusive prompts</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Custom workflows & batch tools</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Prompt Builder</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Priority email support</span>
+                </div>
+                <div class="flex items-start gap-3 ml-8">
+                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <span class="text-sm">Early access to new features</span>
+                </div>
+              </div>
+
+              <a href="/sign-in" class={buttonVariants({ className: 'w-full mt-6' })}>
+                <Bell className="mr-2 h-4 w-4" />
+                Join Waitlist
+              </a>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+
     <!-- Hero Section with Gradient Background -->
     <div class="relative bg-gradient-to-br from-primary/5 via-background to-primary/10 py-24">
       <div class="container max-w-4xl text-center">
@@ -176,147 +319,7 @@ import {
       </div>
     </div>
 
-    <!-- Free vs Premium Comparison -->
-    <div class="container py-20 border-t">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl font-bold mb-4">Free vs Premium</h2>
-        <p class="text-muted-foreground max-w-2xl mx-auto">
-          Start with our free plan and upgrade when you're ready for advanced features.
-        </p>
-      </div>
 
-      <div class="max-w-4xl mx-auto">
-        <div class="grid md:grid-cols-2 gap-6">
-          <!-- Free Plan -->
-          <Card className="border-2">
-            <CardContent className="pt-8 pb-8">
-              <div class="text-center mb-6">
-                <h3 class="text-2xl font-bold mb-2">Free Forever</h3>
-                <div class="mb-2">
-                  <span class="text-5xl font-bold">$0</span>
-                </div>
-                <p class="text-muted-foreground">Perfect to get started</p>
-              </div>
-
-              <div class="space-y-3">
-                <div class="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  <span class="text-sm">Browse all approved prompts</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  <span class="text-sm">Search and filter by category</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  <span class="text-sm">Submit your own prompts</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  <span class="text-sm">Copy prompts to clipboard</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  <span class="text-sm">View up to 10 prompts per session</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
-                  <span class="text-sm text-muted-foreground">AI execution engine</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
-                  <span class="text-sm text-muted-foreground">Save favorites & bookmarks</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
-                  <span class="text-sm text-muted-foreground">Execution history</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
-                  <span class="text-sm text-muted-foreground">Exclusive premium prompts</span>
-                </div>
-                <div class="flex items-start gap-3">
-                  <X className="h-5 w-5 text-muted-foreground/40 shrink-0 mt-0.5" />
-                  <span class="text-sm text-muted-foreground">Priority support</span>
-                </div>
-              </div>
-
-              <a href="/directory" class={buttonVariants({ variant: 'outline', className: 'w-full mt-6' })}>
-                Browse Free Prompts
-              </a>
-            </CardContent>
-          </Card>
-
-          <!-- Premium Plan -->
-          <Card className="border-2 border-primary shadow-lg relative">
-            <div class="absolute -top-4 left-1/2 -translate-x-1/2">
-              <Badge className="bg-primary text-primary-foreground px-4 py-1">
-                Coming Soon
-              </Badge>
-            </div>
-            
-            <CardContent className="pt-8 pb-8">
-              <div class="text-center mb-6">
-                <h3 class="text-2xl font-bold mb-2">Premium</h3>
-                <div class="mb-2">
-                  <!-- <span class="text-5xl font-bold">$19</span> -->
-                  <!-- <span class="text-muted-foreground ml-2">/ month</span> -->
-                </div>
-                <p class="text-muted-foreground">For power users and church ministry teams</p>
-              </div>
-
-              <div class="space-y-3">
-                <div class="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
-                  <span class="text-sm font-medium">Everything in Free, plus:</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Unlimited prompt views</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">AI execution engine built-in</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Save unlimited favorites</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Full execution history</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Access to exclusive prompts</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Custom workflows & batch tools</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Prompt Builder</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Priority email support</span>
-                </div>
-                <div class="flex items-start gap-3 ml-8">
-                  <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                  <span class="text-sm">Early access to new features</span>
-                </div>
-              </div>
-
-              <a href="/sign-in" class={buttonVariants({ className: 'w-full mt-6' })}>
-                <Bell className="mr-2 h-4 w-4" />
-                Join Waitlist
-              </a>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
 
     <!-- CTA Section -->
     <div class="container pb-20">

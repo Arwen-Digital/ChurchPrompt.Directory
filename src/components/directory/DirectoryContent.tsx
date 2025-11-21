@@ -32,10 +32,16 @@ export const DirectoryContent: React.FC = () => {
     search: searchQuery || undefined,
     sort: sort === 'popular' ? 'usage' : sort || undefined,
   });
+  // Recent approved prompts for preview section
+  const recentPrompts = useQuery(api.prompts.getApprovedPrompts, {
+    limit: 3,
+    sort: 'recent',
+  });
 
   // Loading and error states
   const isLoading = prompts === undefined || categoriesData === undefined;
   const promptList = prompts || [];
+  const newestList = recentPrompts || [];
   const categories: Category[] = categoriesData?.map(cat => ({
     id: cat.categoryId,
     name: cat.name,
@@ -114,6 +120,33 @@ export const DirectoryContent: React.FC = () => {
 
       <div className="flex-1 min-w-0">
         <div className="mb-6 space-y-4">
+          {/* Newest Submitted Prompts section - only show when no filters/search are active */}
+          {selectedCategories.length === 0 && !searchQuery && !sort && (
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold">Newest Submitted Prompts</h2>
+              <p className="text-sm text-muted-foreground mb-4">Recently added submissions from the community</p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {newestList.length === 0 ? (
+                  <div className="text-sm text-muted-foreground">No recent submissions.</div>
+                ) : (
+                  newestList.map((p: any) => (
+                    <a
+                      key={p.id}
+                      href={`/directory/${p.id}`}
+                      className="block p-3 border rounded-md hover:shadow-sm bg-card"
+                    >
+                      <div className="text-sm font-medium line-clamp-2">{p.title}</div>
+                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.excerpt}</div>
+                      <div className="text-xs text-muted-foreground mt-2">By {p.authorName || 'Anonymous'}</div>
+                    </a>
+                  ))
+                )}
+              </div>
+
+              <div className="border-b mt-4" />
+            </div>
+          )}
           <div>
             <h1 className="text-3xl font-bold mb-2">Browse Prompts</h1>
             <p className="text-muted-foreground">
