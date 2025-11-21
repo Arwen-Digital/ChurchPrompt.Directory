@@ -107,15 +107,16 @@ export default function PromptGrid({
   // Grid with prompts
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {prompts.map((prompt) => (
-        <PromptCard
-          key={prompt.id}
-          prompt={prompt}
-          onCopy={onCopy}
-          onSave={onSave}
-          onView={onView}
-          isFavorite={favoriteIds.includes(prompt.id)}
-        />
+      {prompts.map((prompt, idx) => (
+        <div key={prompt.id} style={{ animation: `slideUpFadeIn 0.6s ease-out ${idx * 0.1}s both` }}>
+          <PromptCard
+            prompt={prompt}
+            onCopy={onCopy}
+            onSave={onSave}
+            onView={onView}
+            isFavorite={favoriteIds.includes(prompt.id)}
+          />
+        </div>
       ))}
     </div>
   );

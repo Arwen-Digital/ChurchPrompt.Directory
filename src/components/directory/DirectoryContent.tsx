@@ -130,11 +130,12 @@ export const DirectoryContent: React.FC = () => {
                 {newestList.length === 0 ? (
                   <div className="text-sm text-muted-foreground">No recent submissions.</div>
                 ) : (
-                  newestList.map((p: any) => (
+                  newestList.map((p: any, idx: number) => (
                     <a
                       key={p.id}
                       href={`/directory/${p.id}`}
                       className="block p-3 border rounded-md hover:shadow-sm bg-card"
+                      style={{ animation: `slideUpFadeIn 0.6s ease-out ${idx * 0.1}s both` }}
                     >
                       <div className="text-sm font-medium line-clamp-2">{p.title}</div>
                       <div className="text-xs text-muted-foreground mt-1 line-clamp-2">{p.excerpt}</div>

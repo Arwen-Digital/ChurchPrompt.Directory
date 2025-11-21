@@ -141,8 +141,8 @@ export default function PromptDetail({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="space-y-4">
+      {/* Header - Full Width */}
+      <div className="space-y-4" style={{ animation: 'slideUpFadeIn 0.6s ease-out' }}>
         <div className="flex items-center gap-2">
           <Badge variant="secondary">{categoryDisplay}</Badge>
           {prompt.featured && (
@@ -159,156 +159,196 @@ export default function PromptDetail({
         </h1>
       </div>
 
-      {/* Action Buttons */}
-      <TooltipProvider>
-        <div className="flex flex-wrap items-center gap-3">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={handleCopy} variant="default">
-                <Copy className="mr-2 h-4 w-4" />
-                {copied ? "Copied!" : "Copy Prompt"}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Copy prompt to clipboard</p>
-            </TooltipContent>
-          </Tooltip>
-          
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={handleSave} variant="outline">
-                <Heart
-                  className={`mr-2 h-4 w-4 ${
-                    saved ? "fill-red-500 text-red-500" : ""
-                  }`}
-                />
-                {saved ? "Saved" : "Save"}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{saved ? "Remove from favorites" : "Save to favorites"}</p>
-            </TooltipContent>
-          </Tooltip>
-          
-          {isSubscribed ? (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button onClick={handleRun} variant="secondary">
-                  <Play className="mr-2 h-4 w-4" />
-                  Run Prompt
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Execute prompt with AI</p>
-              </TooltipContent>
-            </Tooltip>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button asChild variant="secondary">
-                  <a href="/subscribe">
-                    <Play className="mr-2 h-4 w-4" />
-                    Upgrade to Run
-                  </a>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Subscribe to execute prompts with AI</p>
-              </TooltipContent>
-            </Tooltip>
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column - Main Content (2/3 width) */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Content */}
+          <div style={{ animation: 'slideUpFadeIn 0.6s ease-out 0.2s both' }}>
+            <Card>
+              <CardContent className="pt-6">
+                <div className="prose prose-slate max-w-none">
+                  <h3 className="text-lg font-semibold mb-3">Prompt Content</h3>
+                  <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed bg-muted p-4 rounded-lg">
+                    {prompt.content}
+                  </pre>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Tags */}
+          {prompt.tags.length > 0 && (
+            <div className="space-y-3" style={{ animation: 'slideUpFadeIn 0.6s ease-out 0.3s both' }}>
+              <h3 className="text-sm font-semibold">Tags</h3>
+              <div className="flex flex-wrap gap-2">
+                {prompt.tags.map((tag) => (
+                  <Badge key={tag} variant="outline">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           )}
+        </div>
+
+        {/* Right Column - Actions & Info (1/3 width) */}
+        <div className="space-y-4">
+          {/* Quick Action Buttons - Icon buttons */}
+          <TooltipProvider>
+            <Card className="p-4" style={{ animation: 'slideUpFadeIn 0.6s ease-out 0.1s both' }}>
+              <div className="space-y-2">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      onClick={handleCopy} 
+                      variant="ghost" 
+                      size="sm"
+                      className="w-full justify-start text-sm"
+                    >
+                      <Copy className="mr-3 h-4 w-4" />
+                      {copied ? "Copied!" : "Copy to Clipboard"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Copy prompt to clipboard</TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button 
+                      onClick={handleSave} 
+                      variant="ghost" 
+                      size="sm"
+                      className="w-full justify-start text-sm"
+                    >
+                      <Heart
+                        className={`mr-3 h-4 w-4 ${
+                          saved ? "fill-red-500 text-red-500" : ""
+                        }`}
+                      />
+                      {saved ? "Remove from Favorites" : "Save to Favorites"}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {saved ? "Remove from favorites" : "Save to favorites"}
+                  </TooltipContent>
+                </Tooltip>
+                
+                {isSubscribed ? (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        onClick={handleRun} 
+                        variant="ghost" 
+                        size="sm"
+                        className="w-full justify-start text-sm text-primary"
+                      >
+                        <Play className="mr-3 h-4 w-4" />
+                        Run with AI
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Execute prompt with AI</TooltipContent>
+                  </Tooltip>
+                ) : (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        asChild 
+                        variant="ghost" 
+                        size="sm"
+                        className="w-full justify-start text-sm text-primary"
+                      >
+                        <a href="/subscribe">
+                          <Play className="mr-3 h-4 w-4" />
+                          Upgrade to Run
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Subscribe to execute prompts with AI</TooltipContent>
+                  </Tooltip>
+                )}
+              </div>
+            </Card>
+          </TooltipProvider>
 
           {/* Admin Actions */}
           {userIsAdmin && (
-            <>
-              <div className="h-6 w-px bg-border" />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="sm" onClick={handleEdit}>
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Edit this prompt (Admin)</p>
-                </TooltipContent>
-              </Tooltip>
-              
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button variant="outline" size="sm" onClick={handleDelete}>
-                    <Trash2 className="mr-2 h-4 w-4 text-destructive" />
-                    Delete
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Delete this prompt (Admin)</p>
-                </TooltipContent>
-              </Tooltip>
-              
-              <Badge variant="default" className="flex items-center gap-1">
-                <Shield className="h-3 w-3" />
-                Admin View
-              </Badge>
-            </>
+            <TooltipProvider>
+              <Card className="p-4 border-orange-200 bg-orange-50/50">
+                <div className="space-y-2">
+                  <p className="text-xs font-semibold text-orange-900 px-2">Admin Tools</p>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={handleEdit}
+                        className="w-full justify-start text-sm"
+                      >
+                        <Edit className="mr-3 h-4 w-4" />
+                        Edit Prompt
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Edit this prompt</TooltipContent>
+                  </Tooltip>
+                  
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={handleDelete}
+                        className="w-full justify-start text-sm text-destructive hover:text-destructive"
+                      >
+                        <Trash2 className="mr-3 h-4 w-4" />
+                        Delete Prompt
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Delete this prompt</TooltipContent>
+                  </Tooltip>
+                </div>
+              </Card>
+            </TooltipProvider>
           )}
-        </div>
-      </TooltipProvider>
 
-      {/* Stats */}
-      <div className="flex flex-wrap gap-6 text-sm text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <TrendingUp className="h-4 w-4" />
-          <span>{prompt.usageCount} copies</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Eye className="h-4 w-4" />
-          <span>{prompt.executionCount} executions</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Calendar className="h-4 w-4" />
-          <span>Added {createdDate}</span>
+          {/* Stats Card */}
+          <Card className="p-4" style={{ animation: 'slideUpFadeIn 0.6s ease-out 0.2s both' }}>
+            <div className="space-y-3 text-sm">
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Usage</p>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">{prompt.usageCount}</span>
+                  <span className="text-xs text-muted-foreground">copies</span>
+                </div>
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Executions</p>
+                <div className="flex items-center gap-2">
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium">{prompt.executionCount}</span>
+                  <span className="text-xs text-muted-foreground">times</span>
+                </div>
+              </div>
+              <div className="pt-2 border-t">
+                <p className="text-xs text-muted-foreground mb-1">Added</p>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-xs">{createdDate}</span>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          {/* Usage Instructions */}
+          <Card className="p-4 border-dashed bg-muted/20" style={{ animation: 'slideUpFadeIn 0.6s ease-out 0.3s both' }}>
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Quick Tip</h3>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Replace bracketed placeholders with your specific details before using.
+            </p>
+          </Card>
         </div>
       </div>
-
-      {/* Content */}
-      <Card>
-        <CardContent className="pt-6">
-          <div className="prose prose-slate max-w-none">
-            <h3 className="text-lg font-semibold mb-3">Prompt Content</h3>
-            <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed bg-muted p-4 rounded-lg">
-              {prompt.content}
-            </pre>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Tags */}
-      {prompt.tags.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-sm font-semibold">Tags</h3>
-          <div className="flex flex-wrap gap-2">
-            {prompt.tags.map((tag) => (
-              <Badge key={tag} variant="outline">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Usage Instructions */}
-      <Card className="bg-muted/50">
-        <CardContent className="pt-6">
-          <h3 className="text-sm font-semibold mb-2">How to use this prompt</h3>
-          <p className="text-sm text-muted-foreground">
-            Copy this prompt and paste it into your preferred AI tool, replacing
-            any bracketed placeholders with your specific information. For
-            subscribed users, you can run this prompt directly in-app with our
-            AI integration.
-          </p>
-        </CardContent>
-      </Card>
 
       {/* Execution Modal */}
       <ExecutionModal
