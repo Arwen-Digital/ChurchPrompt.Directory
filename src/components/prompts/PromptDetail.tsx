@@ -238,16 +238,17 @@ export default function PromptDetail({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button 
-                        onClick={handleRun} 
+                        disabled
                         variant="ghost" 
                         size="sm"
-                        className="w-full justify-start text-sm text-primary"
+                        className="w-full justify-start text-sm text-primary cursor-not-allowed"
+                        aria-disabled="true"
                       >
                         <Play className="mr-3 h-4 w-4" />
                         Run with AI
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>Execute prompt with AI</TooltipContent>
+                    <TooltipContent>Temporarily disabled</TooltipContent>
                   </Tooltip>
                 ) : (
                   <Tooltip>
