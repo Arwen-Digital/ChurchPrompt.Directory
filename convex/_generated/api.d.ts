@@ -9,6 +9,7 @@
  */
 
 import type * as categories from "../categories.js";
+import type * as directory from "../directory.js";
 import type * as http from "../http.js";
 import type * as migrate_http from "../migrate_http.js";
 import type * as migrations from "../migrations.js";
@@ -24,6 +25,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   categories: typeof categories;
+  directory: typeof directory;
   http: typeof http;
   migrate_http: typeof migrate_http;
   migrations: typeof migrations;

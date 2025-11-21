@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@astrojs/db": "^0.18.2",
+    "@astrojs/node": "^9.5.1",
     "@astrojs/react": "^4.4.2",
     "@astrojs/tailwind": "^6.0.2",
     "@clerk/astro": "^2.16.0",

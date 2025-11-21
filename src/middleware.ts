@@ -26,8 +26,8 @@ export const onRequest = clerkMiddleware(async (auth, context, next) => {
       return redirectToSignIn();
     }
 
-    // Fetch user role from Convex
-    const convexUrl = context.locals.runtime?.env?.PUBLIC_CONVEX_URL || import.meta.env.PUBLIC_CONVEX_URL;
+    // Fetch user role from Convex (runtime may be absent in type; cast for optional access)
+    const convexUrl = (context.locals as any).runtime?.env?.PUBLIC_CONVEX_URL || import.meta.env.PUBLIC_CONVEX_URL;
     
     if (convexUrl) {
       try {

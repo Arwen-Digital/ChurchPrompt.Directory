@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
+import type { DirectoryBootData } from '../../../convex/directory';
 import { Sidebar, type Category } from './Sidebar';
 import PromptGrid from '@/components/prompts/PromptGrid';
 
@@ -21,28 +22,56 @@ export interface Prompt {
 }
 
 export const DirectoryContent: React.FC = () => {
+  const BOOT_CACHE_KEY = 'directoryBootData';
+  const BOOT_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes freshness
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sort, setSort] = useState<string>(''); // '' = default heuristic
 
-  // Fetch data from Convex
-  const categoriesData = useQuery(api.categories.getCategories);
+  // Boot data: categories + recent prompts (single aggregated query)
+  const bootData: DirectoryBootData | undefined = useQuery(api.directory.getDirectoryBootData);
+  const [cachedBootData, setCachedBootData] = React.useState<DirectoryBootData | null>(null);
+
+  // Load cached boot data on mount if fresh
+  React.useEffect(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem(BOOT_CACHE_KEY) : null;
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.data && typeof parsed.ts === 'number') {
+        const age = Date.now() - parsed.ts;
+        if (age < BOOT_CACHE_TTL_MS) {
+          setCachedBootData(parsed.data as DirectoryBootData);
+        }
+      }
+    } catch (_) {
+      // ignore malformed cache
+    }
+  }, []);
+
+  // Persist fresh boot data when query resolves
+  React.useEffect(() => {
+    if (bootData) {
+      try {
+        window.localStorage.setItem(BOOT_CACHE_KEY, JSON.stringify({ data: bootData, ts: Date.now() }));
+        setCachedBootData(bootData);
+      } catch (_) {
+        // storage may be unavailable
+      }
+    }
+  }, [bootData]);
   const prompts = useQuery(api.prompts.getApprovedPrompts, {
     category: selectedCategories.length > 0 ? selectedCategories[0] : undefined,
     search: searchQuery || undefined,
     sort: sort === 'popular' ? 'usage' : sort || undefined,
   });
-  // Recent approved prompts for preview section
-  const recentPrompts = useQuery(api.prompts.getApprovedPrompts, {
-    limit: 3,
-    sort: 'recent',
-  });
 
   // Loading and error states
-  const isLoading = prompts === undefined || categoriesData === undefined;
+  const effectiveBoot = bootData || cachedBootData || null;
+  const isLoading = prompts === undefined || !effectiveBoot;
   const promptList = prompts || [];
-  const newestList = recentPrompts || [];
-  const categories: Category[] = categoriesData?.map(cat => ({
+  const newestList = effectiveBoot?.recentPrompts || [];
+  const categories: Category[] = effectiveBoot?.categories?.map(cat => ({
     id: cat.categoryId,
     name: cat.name,
     description: cat.description,
