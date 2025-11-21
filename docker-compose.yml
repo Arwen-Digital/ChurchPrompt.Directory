@@ -1,37 +1,41 @@
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: church-prompt-directory:latest
-    # Map this host port for the container's 3000; change HOST_PORT or set to 0 for automatic ephemeral mapping
+    container_name: church-prompt-directory
+    # If Dokploy auto-assigns ports, you can remove the ports section entirely.
     ports:
       - "${HOST_PORT:-3000}:3000"
     environment:
-      - NODE_ENV=production
-      - PORT=3000
-      - PUBLIC_CONVEX_URL=${PUBLIC_CONVEX_URL}
-      - CONVEX_URL=${CONVEX_URL}
-      - PUBLIC_CLERK_PUBLISHABLE_KEY=${PUBLIC_CLERK_PUBLISHABLE_KEY}
-      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
-    env_file: .env
+      NODE_ENV: production
+      PORT: 3000
+      # Set these in Dokploy UI or .env; defaults warn if unset.
+      PUBLIC_CONVEX_URL: ${PUBLIC_CONVEX_URL:-}
+      CONVEX_URL: ${CONVEX_URL:-}
+      PUBLIC_CLERK_PUBLISHABLE_KEY: ${PUBLIC_CLERK_PUBLISHABLE_KEY:-}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY:-}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/" ]
+      test: ["CMD", "curl", "-fsS", "http://localhost:3000/" ]
       interval: 30s
       timeout: 5s
-      retries: 3
+      retries: 5
 
   # Optional local development convex service (only runs when profile 'dev' is enabled)
-  convex-dev:
-    image: node:20-alpine
-    working_dir: /app
-    volumes:
-      - ./:/app
-    command: sh -c "npm install -g convex && convex dev"
-    ports:
-      - "8888:8888"
-    profiles: ["dev"]
-    environment:
-      - CONVEX_URL=http://localhost:8888
+  # Optional: uncomment for a local Convex dev container (not recommended in production)
+  # convex-dev:
+  #   image: node:20-alpine
+  #   working_dir: /app
+  #   volumes:
+  #     - ./:/app
+  #   command: sh -c "npm install -g convex && convex dev"
+  #   ports:
+  #     - "8888:8888"
+  #   profiles: ["dev"]
+  #   environment:
+  #     CONVEX_URL: http://localhost:8888
 
 networks:
   default:

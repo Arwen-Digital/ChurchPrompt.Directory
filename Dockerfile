@@ -7,11 +7,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies & build (single install for speed)
 COPY package.json package-lock.json* ./
 RUN npm ci
-
-# Copy source and build
 COPY . .
 RUN npm run build
 
@@ -19,13 +17,16 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Install only production dependencies
-COPY package.json package-lock.json* ./
-RUN npm ci --only=production
-
-# Copy build artifacts
+# Copy runtime artifacts & node_modules from builder, prune dev deps
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/public ./public
+RUN npm prune --production
+
+# Non-root user for security (node user exists in official image)
+USER node
 
 EXPOSE 3000
-CMD ["npm", "start"]
+# Directly run Astro's generated entrypoint (set by @astrojs/node adapter)
+CMD ["node", "dist/server/entry.mjs"]
