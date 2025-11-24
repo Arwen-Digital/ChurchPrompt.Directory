@@ -18,6 +18,9 @@ const currentPath = Astro.url.pathname;
 ---
 
 <BaseLayout title={title} description={description}>
+  <!-- Pass through additional head content -->
+  <slot name="head" slot="head" />
+  
   <!-- Skip to main content link for accessibility -->
   <a 
     href="#main-content" 

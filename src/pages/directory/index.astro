@@ -2,10 +2,120 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import { DirectoryWithProvider } from '@/components/directory/DirectoryWithProvider';
 
+export const prerender = false;
+
 const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
+
+// SEO metadata
+const title = "Browse AI Prompts for Church Ministry | Church Prompt Directory";
+const description = "Explore our comprehensive directory of AI prompts designed specifically for church ministry, pastoral care, worship planning, and faith-based content creation. Discover, copy, and execute proven prompts used by church leaders worldwide.";
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Get query parameters for dynamic SEO
+const categoryParam = Astro.url.searchParams.get('category');
+const searchParam = Astro.url.searchParams.get('search');
+
+// Fetch category data if category filter is present
+let categoryName = '';
+let categoryDescription = '';
+if (categoryParam && convexUrl) {
+  try {
+    const response = await fetch(`${convexUrl}/api/query`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        path: 'categories:getCategories',
+        args: {},
+        format: 'json',
+      }),
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      const categories = result.value || [];
+      const category = categories.find((c: any) => c.categoryId === categoryParam);
+      if (category) {
+        categoryName = category.name;
+        categoryDescription = category.description;
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch categories:', error);
+  }
+}
+
+// Dynamic title and description based on filters
+const dynamicTitle = categoryName 
+  ? `${categoryName} AI Prompts for Churches | Church Prompt Directory`
+  : searchParam
+  ? `Search Results: "${searchParam}" | Church Prompt Directory`
+  : title;
+
+const dynamicDescription = categoryName
+  ? `Discover AI prompts for ${categoryName.toLowerCase()} in church ministry. ${categoryDescription}`
+  : searchParam
+  ? `Search results for "${searchParam}" in our directory of AI prompts for church ministry and pastoral care.`
+  : description;
 ---
 
-<MainLayout title="Browse Prompts | Church Prompt Directory">
+<MainLayout title={dynamicTitle} description={dynamicDescription}>
+  <!-- Enhanced SEO Meta Tags -->
+  <Fragment slot="head">
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={dynamicTitle} />
+    <meta property="og:description" content={dynamicDescription} />
+    <meta property="og:site_name" content="Church Prompt Directory" />
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonicalURL} />
+    <meta name="twitter:title" content={dynamicTitle} />
+    <meta name="twitter:description" content={dynamicDescription} />
+    
+    <!-- Additional SEO -->
+    <meta name="keywords" content="church AI prompts, ministry AI tools, pastoral care prompts, church content creation, worship planning AI, church leadership tools" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="Church Prompt Directory" />
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": dynamicTitle,
+      "description": dynamicDescription,
+      "url": canonicalURL,
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Church Prompt Directory",
+        "url": Astro.site
+      },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": Astro.site
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Directory",
+            "item": canonicalURL
+          }
+        ]
+      }
+    })} />
+  </Fragment>
+
   <div class="container py-8">
     <DirectoryWithProvider 
       client:only="react"

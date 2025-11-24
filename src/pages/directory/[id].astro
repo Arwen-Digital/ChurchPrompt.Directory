@@ -12,9 +12,139 @@ const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
 if (!id) {
   return Astro.redirect('/404');
 }
+
+// Fetch prompt data for SEO
+let promptData: any = null;
+let title = "Prompt Detail | Church Prompt Directory";
+let description = "View detailed information about this AI prompt for church ministry.";
+
+if (convexUrl) {
+  try {
+    const response = await fetch(`${convexUrl}/api/query`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        path: 'prompts:getPromptById',
+        args: { id },
+        format: 'json',
+      }),
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      promptData = result.value;
+      
+      if (promptData) {
+        title = `${promptData.title} | Church Prompt Directory`;
+        description = promptData.excerpt || promptData.content.substring(0, 155) + '...';
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch prompt:', error);
+  }
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
-<MainLayout title="Prompt Detail | Church Prompt Directory">
+<MainLayout title={title} description={description}>
+  <!-- Enhanced SEO Meta Tags -->
+  <Fragment slot="head">
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+    
+    {promptData && (
+      <>
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:site_name" content="Church Prompt Directory" />
+        <meta property="article:published_time" content={new Date(promptData.createdAt).toISOString()} />
+        <meta property="article:modified_time" content={new Date(promptData.updatedAt).toISOString()} />
+        <meta property="article:author" content={promptData.authorName} />
+        <meta property="article:section" content={promptData.category} />
+        {promptData.tags.map((tag: string) => (
+          <meta property="article:tag" content={tag} />
+        ))}
+        
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={canonicalURL} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        
+        <!-- Additional SEO -->
+        <meta name="keywords" content={promptData.tags.join(', ')} />
+        <meta name="robots" content="index, follow" />
+        <meta name="author" content={promptData.authorName} />
+        
+        <!-- JSON-LD Structured Data -->
+        <script type="application/ld+json" set:html={JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": promptData.title,
+          "description": description,
+          "author": {
+            "@type": "Person",
+            "name": promptData.authorName
+          },
+          "datePublished": new Date(promptData.createdAt).toISOString(),
+          "dateModified": new Date(promptData.updatedAt).toISOString(),
+          "publisher": {
+            "@type": "Organization",
+            "name": "Church Prompt Directory",
+            "url": Astro.site
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": canonicalURL
+          },
+          "keywords": promptData.tags.join(', '),
+          "articleSection": promptData.category,
+          "interactionStatistic": [
+            {
+              "@type": "InteractionCounter",
+              "interactionType": "https://schema.org/UseAction",
+              "userInteractionCount": promptData.usageCount
+            },
+            {
+              "@type": "InteractionCounter",
+              "interactionType": "https://schema.org/ActivateAction",
+              "userInteractionCount": promptData.executionCount
+            }
+          ],
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": Astro.site
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Directory",
+                "item": new URL('/directory', Astro.site)
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": promptData.title,
+                "item": canonicalURL
+              }
+            ]
+          }
+        })} />
+      </>
+    )}
+  </Fragment>
+
   <div class="container py-8">
     <!-- Back Button -->
     <div class="mb-6">
