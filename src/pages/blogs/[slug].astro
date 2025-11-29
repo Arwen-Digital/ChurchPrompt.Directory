@@ -102,107 +102,101 @@ const contentHtml = marked.parse(blog.content);
   ogType="article"
   canonicalUrl={canonicalUrl}
 >
-  <div class="container py-12">
-    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-      <!-- Back button -->
-      <div class="mb-8">
-        <a href="/blogs" class="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-          Back to Blog
-        </a>
-      </div>
+  <style is:global>
+    .blog-content p {
+    margin-bottom: 1em !important;
+      margin-top: 0 !important;
+    }
+  </style>
+  
+    <article itemscope itemtype="https://schema.org/BlogPosting" class="w-full">
+      <!-- Header Section -->
+      <header class="max-w-[700px] mx-auto mb-12 mt-8">
+        <h1 class="text-[32px] md:text-[42px] font-bold tracking-tight mb-2 text-[#242424] leading-[1.15]" itemprop="headline" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">{blog.title}</h1>
+        
+        {blog.excerpt && (
+          <p class="text-[20px] md:text-[22px] text-[#6B6B6B] mb-8 leading-[1.4] mt-2" itemprop="description" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+            {blog.excerpt}
+          </p>
+        )}
 
-      <article itemscope itemtype="https://schema.org/BlogPosting" class="max-w-4xl mx-auto">
-        <!-- Header -->
-        <header class="mb-10 text-center">
-          {blog.featured && (
-            <span class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold bg-primary/10 text-primary mb-6">
-              Featured Post
+        <!-- Author / Meta -->
+        <div class="flex items-center gap-3 text-[14px]">
+          <div class="w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="flex flex-col leading-snug">
+            <span itemprop="author" itemscope itemtype="https://schema.org/Person" class="font-medium text-[#242424]" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+              <span itemprop="name">{blog.authorName}</span>
             </span>
-          )}
-          
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight text-foreground" itemprop="headline">{blog.title}</h1>
-          
-          <!-- Meta information -->
-          <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground mb-8">
-            <span class="flex items-center gap-2" itemprop="author" itemscope itemtype="https://schema.org/Person">
-              <div class="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              </div>
-              <span itemprop="name" class="font-medium text-foreground">{blog.authorName}</span>
-            </span>
-            
-            <time datetime={blog.publishedAt ? new Date(blog.publishedAt).toISOString() : ''} itemprop="datePublished" class="flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
-              {formatDate(blog.publishedAt)}
-            </time>
+            <div class="flex items-center gap-1 text-[#6B6B6B]" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+              <span>5 min read</span>
+              <span>·</span>
+              <time datetime={blog.publishedAt ? new Date(blog.publishedAt).toISOString() : ''} itemprop="datePublished">
+                {formatDate(blog.publishedAt)}
+              </time>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Featured Image (Wide) -->
+      {blog.featuredImage && (
+         <div class="max-w-screen-lg mx-auto mb-14">
+            <div class="aspect-[2/1] w-full overflow-hidden bg-muted">
+              <img 
+                src={blog.featuredImage} 
+                alt={blog.title}
+                class="w-full h-full object-cover"
+                itemprop="image"
+              />
+            </div>
+         </div>
+      )}
+
+      <!-- Content -->
+      <div class="max-w-[700px] mx-auto mb-20">
+          <div 
+            class="blog-content prose prose-slate dark:prose-invert max-w-none
+              text-[20px] leading-[1.58] text-[rgba(41,41,41,1)]
+              prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[#242424]
+              prose-headings:font-sans
+              prose-h1:text-[32px] prose-h1:mt-[2.5em] prose-h1:mb-[0.8em]
+              prose-h2:text-[26px] prose-h2:mt-[2em] prose-h2:mb-[0.6em]
+              prose-h3:text-[22px] prose-h3:mt-[1.8em] prose-h3:mb-[0.5em]
+              prose-ul:my-[1.5em] prose-ul:pl-6
+              prose-ol:my-[1.5em] prose-ol:pl-6
+              prose-li:mb-[0.5em]
+              prose-a:text-[#242424] prose-a:underline prose-a:decoration-[#6B6B6B] prose-a:underline-offset-2 prose-a:hover:decoration-[#242424] prose-a:transition-all
+              prose-blockquote:border-l-[3px] prose-blockquote:border-[#242424] prose-blockquote:pl-5 prose-blockquote:italic prose-blockquote:my-[1.5em] prose-blockquote:text-[24px] prose-blockquote:leading-[1.4] prose-blockquote:text-[#242424]
+              prose-img:my-[2em] prose-img:w-full
+              prose-code:font-mono prose-code:text-[0.85em] prose-code:bg-[#F2F2F2] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
+              prose-pre:bg-[#F9F9F9] prose-pre:p-6 prose-pre:rounded-sm prose-pre:my-[1.5em]"
+            itemprop="articleBody"
+            set:html={contentHtml}
+            style="font-family: source-serif-pro, Georgia, Cambria, 'Times New Roman', Times, serif;"
+          >
           </div>
 
-          <!-- Featured Image -->
-          {blog.featuredImage && (
-             <div class="mb-10 rounded-xl overflow-hidden shadow-lg border bg-muted aspect-video relative">
-                <img 
-                  src={blog.featuredImage} 
-                  alt={blog.title}
-                  class="w-full h-full object-cover"
-                  itemprop="image"
-                />
-             </div>
-          )}
-
-          <!-- Excerpt -->
-          {blog.excerpt && (
-            <p class="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl mx-auto" itemprop="description">
-              {blog.excerpt}
-            </p>
-          )}
-        </header>
-
-        <hr class="my-10 border-muted" />
-
-        <!-- Content - Server-rendered HTML -->
-        <div class="mb-16">
-            <div 
-              class="prose prose-lg prose-slate dark:prose-invert max-w-none
-                prose-headings:font-bold prose-headings:tracking-tight
-                prose-h1:text-3xl prose-h1:mt-12 prose-h1:mb-6
-                prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
-                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-p:leading-8 prose-p:mb-6
-                prose-a:text-primary prose-a:no-underline prose-a:border-b prose-a:border-primary/30 prose-a:hover:border-primary prose-a:transition-colors
-                prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-6 prose-blockquote:italic prose-blockquote:my-8 prose-blockquote:text-muted-foreground prose-blockquote:bg-muted/30 prose-blockquote:py-2 prose-blockquote:pr-4 prose-blockquote:rounded-r
-                prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:text-foreground
-                prose-pre:bg-muted prose-pre:p-6 prose-pre:rounded-xl prose-pre:shadow-sm prose-pre:overflow-x-auto prose-pre:my-8
-                prose-img:rounded-xl prose-img:shadow-md prose-img:my-8"
-              itemprop="articleBody"
-              set:html={contentHtml}
-            />
-        </div>
-
-        <!-- Tags -->
-        {blog.tags.length > 0 && (
-          <div class="mb-12 pt-8 border-t">
-            <div class="flex items-center gap-3 flex-wrap">
-              <span class="text-sm font-medium text-muted-foreground">
-                Tags:
-              </span>
+          <!-- Tags -->
+          {blog.tags.length > 0 && (
+            <div class="mt-14 pt-8 flex flex-wrap gap-2">
               {blog.tags.map((tag) => (
-                <a href={`/blogs?tag=${tag}`} class="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium hover:bg-muted transition-colors" itemprop="keywords">
+                <a href={`/blogs?tag=${tag}`} class="inline-flex items-center rounded-full bg-[#F2F2F2] px-4 py-2 text-[14px] text-[#242424] hover:bg-[#E6E6E6] transition-colors" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
                   {tag}
                 </a>
               ))}
             </div>
-          </div>
-        )}
+          )}
 
-        <!-- Footer navigation -->
-        <div class="flex justify-between items-center pt-8 border-t">
-          <a href="/blogs" class="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-            Back to All Posts
-          </a>
-        </div>
-      </article>
-    </div>
+          <!-- Footer navigation -->
+          <div class="mt-10 py-8 border-t border-[#F2F2F2]">
+            <a href="/blogs" class="text-[15px] font-medium text-[#6B6B6B] hover:text-[#242424] transition-colors flex items-center gap-2" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+              Back to all posts
+            </a>
+          </div>
+      </div>
+    </article>
   </div>
 </MainLayout>
