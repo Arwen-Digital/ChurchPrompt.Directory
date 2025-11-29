@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as blogs from "../blogs.js";
 import type * as categories from "../categories.js";
 import type * as directory from "../directory.js";
 import type * as http from "../http.js";
@@ -24,6 +25,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  blogs: typeof blogs;
   categories: typeof categories;
   directory: typeof directory;
   http: typeof http;
