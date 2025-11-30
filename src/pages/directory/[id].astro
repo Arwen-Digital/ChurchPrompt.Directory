@@ -7,9 +7,15 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
-  if (!convexUrl) return [];
+  console.log('[getStaticPaths] PUBLIC_CONVEX_URL:', convexUrl);
+  
+  if (!convexUrl) {
+    console.error('[getStaticPaths] PUBLIC_CONVEX_URL is not set - cannot generate static pages!');
+    return [];
+  }
 
   try {
+    console.log('[getStaticPaths] Fetching prompt IDs from Convex...');
     const idsResp = await fetch(`${convexUrl}/api/query`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -20,11 +26,13 @@ export async function getStaticPaths() {
       }),
     });
     if (!idsResp.ok) {
-      console.error('Failed to fetch prompt ids');
+      console.error('[getStaticPaths] Failed to fetch prompt ids:', idsResp.status);
       return [];
     }
     const idsJson = await idsResp.json();
     const ids: { _id: string }[] = idsJson.value || [];
+    console.log(`[getStaticPaths] Found ${ids.length} prompt IDs`);
+    
     // Parallel fetch each prompt
     const promptsData = await Promise.all(
       ids.map(async (p) => {
@@ -46,11 +54,14 @@ export async function getStaticPaths() {
         }
       })
     );
-    return promptsData
+    const validPaths = promptsData
       .filter((p) => p && p.data)
       .map((p: any) => ({ params: { id: p.id }, props: { promptData: p.data } }));
+    
+    console.log(`[getStaticPaths] Generated ${validPaths.length} static paths`);
+    return validPaths;
   } catch (error) {
-    console.error('Error building static prompt paths', error);
+    console.error('[getStaticPaths] Error building static prompt paths:', error);
     return [];
   }
 }

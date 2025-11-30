@@ -1,11 +1,6 @@
 # Nixpacks configuration for Astro + Node.js deployment
-# IMPORTANT: Set these as BUILD-TIME environment variables in Dokploy:
-#   - PUBLIC_CONVEX_URL
-#   - CONVEX_URL
-#   - PUBLIC_CLERK_PUBLISHABLE_KEY
-#   - CLERK_SECRET_KEY
-#   - PUBLIC_SITE_URL
-# These are required during `npm run build` for getStaticPaths to generate static pages
+# IMPORTANT: Environment variables must be available during BUILD phase
+# In Dokploy, ensure variables are not marked as "secrets" or "runtime-only"
 
 [phases.setup]
 nixPkgs = ["nodejs_20"]
@@ -14,7 +9,11 @@ nixPkgs = ["nodejs_20"]
 cmds = ["npm ci"]
 
 [phases.build]
-cmds = ["npm run build"]
+# Explicitly use environment variables during build
+cmds = [
+  "echo 'Build-time env check: PUBLIC_CONVEX_URL='$PUBLIC_CONVEX_URL",
+  "npm run build"
+]
 
 [start]
 cmd = "node dist/server/entry.mjs"
