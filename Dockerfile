@@ -16,6 +16,8 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
 
 # Copy runtime artifacts & node_modules from builder, prune dev deps
 COPY --from=builder /app/package.json ./package.json

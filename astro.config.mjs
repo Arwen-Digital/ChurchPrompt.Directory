@@ -13,7 +13,12 @@ export default defineConfig({
     port: parseInt(process.env.PORT) || 4321,
     host: true, // ensures 0.0.0.0
   },
-  adapter: node({ mode: 'standalone' }),
+  adapter: node({ 
+    mode: 'standalone',
+    prerender: {
+      fallbackType: '404'
+    }
+  }),
   integrations: [
     react(),
     tailwind({
