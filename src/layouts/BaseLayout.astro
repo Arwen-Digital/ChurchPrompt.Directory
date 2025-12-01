@@ -60,8 +60,12 @@ const finalCanonicalUrl = canonicalUrl || Astro.url.toString();
       const isProduction = window.location.hostname !== 'localhost' && 
                           window.location.hostname !== '127.0.0.1' && 
                           !window.location.hostname.includes('.local');
+
+        // Explicitly exclude staging domain from analytics
+      const isStaging = window.location.hostname === 'churchprompt.io.arwendigital.net';
+    
       
-      if (isProduction) {
+      if (isProduction && !isStaging) {
         // Load gtag script
         const script = document.createElement('script');
         script.async = true;
