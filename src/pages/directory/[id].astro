@@ -28,10 +28,19 @@ export async function getStaticPaths() {
     if (!idsResp.ok) {
       const errorText = await idsResp.text();
       console.error('[getStaticPaths] Failed to fetch prompt ids:', idsResp.status, errorText);
+      console.warn('[getStaticPaths] Convex API error - skipping static prompt pre-rendering. Individual prompts will be rendered on-demand.');
       return [];
     }
     const idsJson = await idsResp.json();
     console.log('[getStaticPaths] Full response:', JSON.stringify(idsJson, null, 2));
+    
+    // Check if response is an error
+    if (idsJson.status === 'error') {
+      console.error('[getStaticPaths] Convex returned error:', idsJson.errorMessage);
+      console.warn('[getStaticPaths] Skipping static prompt pre-rendering. Individual prompts will be rendered on-demand.');
+      return [];
+    }
+    
     const ids: { _id: string }[] = idsJson.value || [];
     console.log(`[getStaticPaths] Found ${ids.length} prompt IDs`);
     
