@@ -26,10 +26,12 @@ export async function getStaticPaths() {
       }),
     });
     if (!idsResp.ok) {
-      console.error('[getStaticPaths] Failed to fetch prompt ids:', idsResp.status);
+      const errorText = await idsResp.text();
+      console.error('[getStaticPaths] Failed to fetch prompt ids:', idsResp.status, errorText);
       return [];
     }
     const idsJson = await idsResp.json();
+    console.log('[getStaticPaths] Full response:', JSON.stringify(idsJson, null, 2));
     const ids: { _id: string }[] = idsJson.value || [];
     console.log(`[getStaticPaths] Found ${ids.length} prompt IDs`);
     
