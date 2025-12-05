@@ -1,4 +1,6 @@
 ---
+export const prerender = true;
+
 import MainLayout from "@/layouts/MainLayout.astro";
 import { FeaturedPrompts } from "@/components/prompts/FeaturedPrompts";
 import { Button } from "@/components/ui/button";
@@ -146,7 +148,24 @@ const iconMap: Record<string, any> = {
         </p>
       </div>
       
-      <FeaturedPrompts client:only="react" convexUrl={convexUrl} />
+      {convexUrl ? (
+        await (async () => {
+          try {
+            const response = await fetch(`${convexUrl}/api/query`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ path: 'prompts:getApprovedPrompts', args: { limit: 12 }, format: 'json' }),
+            });
+            const json = response.ok ? await response.json() : { value: [] };
+            const initialPrompts = (json.value || []).filter((p: any) => p.featured).slice(0, 6);
+            return (<FeaturedPrompts client:load convexUrl={convexUrl} initialPrompts={initialPrompts} />);
+          } catch (e) {
+            return (<FeaturedPrompts client:load convexUrl={convexUrl} />);
+          }
+        })()
+      ) : (
+        <FeaturedPrompts client:load convexUrl={convexUrl} />
+      )}
 
       <div class="text-center mt-12">
         <Button size="lg" variant="outline" asChild>

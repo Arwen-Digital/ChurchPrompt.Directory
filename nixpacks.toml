@@ -1,0 +1,22 @@
+# Nixpacks configuration for Astro + Node.js deployment
+# IMPORTANT: Environment variables must be available during BUILD phase
+# In Dokploy, ensure variables are not marked as "secrets" or "runtime-only"
+
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+# Explicitly use environment variables during build
+cmds = [
+  "echo 'Build-time env check: PUBLIC_CONVEX_URL='$PUBLIC_CONVEX_URL",
+  "npm run build"
+]
+
+[start]
+cmd = "node dist/server/entry.mjs"
+
+[variables]
+NODE_ENV = "production"
