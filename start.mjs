@@ -5,10 +5,12 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const envLocalPath = path.join(__dirname, '.env.local');
+const envPath = path.join(__dirname, '.env');
 
-// Load .env.local into process.env BEFORE importing anything
-if (fs.existsSync(envLocalPath)) {
-  const envContent = fs.readFileSync(envLocalPath, 'utf-8');
+// Helper to load env file
+function loadEnvFile(filePath) {
+  if (!fs.existsSync(filePath)) return null;
+  const envContent = fs.readFileSync(filePath, 'utf-8');
   const lines = envContent.split('\n');
   
   for (const line of lines) {
@@ -24,8 +26,14 @@ if (fs.existsSync(envLocalPath)) {
       }
     }
   }
-  
+  return true;
+}
+
+// Load .env.local first (priority), then .env as fallback
+if (loadEnvFile(envLocalPath)) {
   console.log('✓ Loaded environment variables from .env.local');
+} else if (loadEnvFile(envPath)) {
+  console.log('✓ Loaded environment variables from .env');
 }
 
 // Verify required Clerk variables
