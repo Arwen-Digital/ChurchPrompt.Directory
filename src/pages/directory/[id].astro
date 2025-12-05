@@ -7,10 +7,9 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
-  console.log('[getStaticPaths] PUBLIC_CONVEX_URL:', convexUrl);
   
   if (!convexUrl) {
-    console.error('[getStaticPaths] PUBLIC_CONVEX_URL is not set - cannot generate static pages!');
+    console.error('[getStaticPaths] PUBLIC_CONVEX_URL not set');
     return [];
   }
 
@@ -25,24 +24,26 @@ export async function getStaticPaths() {
         format: 'json',
       }),
     });
+    
     if (!idsResp.ok) {
-      const errorText = await idsResp.text();
-      console.error('[getStaticPaths] Failed to fetch prompt ids:', idsResp.status, errorText);
-      console.warn('[getStaticPaths] Convex API error - skipping static prompt pre-rendering. Individual prompts will be rendered on-demand.');
+      console.warn(`[getStaticPaths] Convex HTTP error ${idsResp.status} - skipping prerender`);
       return [];
     }
-    const idsJson = await idsResp.json();
-    console.log('[getStaticPaths] Full response:', JSON.stringify(idsJson, null, 2));
     
-    // Check if response is an error
+    const idsJson = await idsResp.json();
+    
     if (idsJson.status === 'error') {
-      console.error('[getStaticPaths] Convex returned error:', idsJson.errorMessage);
-      console.warn('[getStaticPaths] Skipping static prompt pre-rendering. Individual prompts will be rendered on-demand.');
+      console.warn('[getStaticPaths] Convex returned error - skipping prerender:', idsJson.errorMessage);
       return [];
     }
     
     const ids: { _id: string }[] = idsJson.value || [];
-    console.log(`[getStaticPaths] Found ${ids.length} prompt IDs`);
+    console.log(`[getStaticPaths] Found ${ids.length} prompts to prerender`);
+    
+    if (ids.length === 0) {
+      console.warn('[getStaticPaths] No prompts found - skipping prerender');
+      return [];
+    }
     
     // Parallel fetch each prompt
     const promptsData = await Promise.all(
@@ -65,6 +66,7 @@ export async function getStaticPaths() {
         }
       })
     );
+    
     const validPaths = promptsData
       .filter((p) => p && p.data)
       .map((p: any) => ({ params: { id: p.id }, props: { promptData: p.data } }));
@@ -72,13 +74,12 @@ export async function getStaticPaths() {
     console.log(`[getStaticPaths] Generated ${validPaths.length} static paths`);
     return validPaths;
   } catch (error) {
-    console.error('[getStaticPaths] Error building static prompt paths:', error);
+    console.warn('[getStaticPaths] Error during prerender (will render on-demand):', error);
     return [];
   }
 }
 
 const { id } = Astro.params;
-// promptData supplied via getStaticPaths props
 // @ts-ignore
 const { promptData } = Astro.props as { promptData: any };
 if (!id) return Astro.redirect('/404');
