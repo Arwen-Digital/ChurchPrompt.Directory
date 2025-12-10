@@ -4,16 +4,22 @@ export const prerender = true;
 import MainLayout from "@/layouts/MainLayout.astro";
 import { FeaturedPrompts } from "@/components/prompts/FeaturedPrompts";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  BookOpen, 
-  FileText, 
-  Heart, 
-  Share2, 
-  Calendar, 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BookOpen,
+  FileText,
+  Heart,
+  Share2,
+  Calendar,
   GraduationCap,
   ArrowRight,
-  Sparkles
+  Sparkles,
 } from "lucide-react";
 
 const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
@@ -23,23 +29,23 @@ let categories: any[] = [];
 if (convexUrl) {
   try {
     const response = await fetch(`${convexUrl}/api/query`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        path: 'categories:getCategories',
+        path: "categories:getCategories",
         args: {},
-        format: 'json',
+        format: "json",
       }),
     });
-    
+
     if (response.ok) {
       const result = await response.json();
       categories = result.value || [];
     }
   } catch (error) {
-    console.error('Failed to fetch categories:', error);
+    console.error("Failed to fetch categories:", error);
   }
 }
 
@@ -58,21 +64,59 @@ const iconMap: Record<string, any> = {
   title="Church Prompt Directory - Free AI Prompts for Ministry | ChatGPT Prompts for Pastors"
   description="Free AI prompt library for churches. 100+ ChatGPT prompts for sermons, pastoral care, worship, and ministry. Discover, copy, and use proven AI prompts designed for church leaders and pastors."
 >
+  <!-- SEO Structured Data -->
+  <Fragment slot="head">
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify([
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: "Church Prompt Directory",
+          url: Astro.site,
+          potentialAction: {
+            "@type": "SearchAction",
+            target: {
+              "@type": "EntryPoint",
+              urlTemplate: `${Astro.site}directory?search={search_term_string}`,
+            },
+            "query-input": "required name=search_term_string",
+          },
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "Church Prompt Directory",
+          url: Astro.site,
+          logo: `${Astro.site}logo.png`,
+          sameAs: [
+            "https://twitter.com/ChurchPrompts",
+            // Add other social profiles here
+          ],
+        },
+      ])}
+    />
+  </Fragment>
   <!-- Hero Section -->
   <section class="gradient-subtle border-b">
     <div class="container section">
       <div class="max-w-4xl mx-auto text-center space-y-6">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-2">
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-2"
+        >
           <Sparkles className="h-4 w-4" />
           <span>AI-Powered Ministry Tools</span>
         </div>
-        <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
+        <h1
+          class="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl"
+        >
           AI Prompts for Church Ministry
         </h1>
         <p class="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Discover, share, and utilize proven AI prompts designed specifically for church leaders, pastors, and ministry staff. 
+          Discover, share, and utilize proven AI prompts designed specifically
+          for church leaders, pastors, and ministry staff.
         </p>
-       <!-- <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <!-- <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <Button size="lg" asChild>
             <a href="/directory">
               Browse Prompts
@@ -98,40 +142,49 @@ const iconMap: Record<string, any> = {
           Browse by Category
         </h2>
         <p class="text-lg text-muted-foreground">
-          Find prompts organized by ministry area to quickly discover what you need
+          Find prompts organized by ministry area to quickly discover what you
+          need
         </p>
       </div>
-      
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categories.map((category, idx) => {
-          const IconComponent = iconMap[category.icon];
-          return (
-            <a href={`/directory?category=${category.categoryId}`} class="block group" style={{ animation: `slideUpFadeIn 0.6s ease-out ${idx * 0.1}s both` }}>
-              <Card className="card-hover h-full">
-                <CardHeader>
-                  <div class="flex items-center gap-3 mb-2">
-                    {IconComponent && (
-                      <div class="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                        <IconComponent className="h-5 w-5" />
-                      </div>
-                    )}
-                    <CardTitle className="text-lg group-hover:text-primary transition-colors">
-                      {category.name}
-                    </CardTitle>
-                  </div>
-                  <CardDescription className="line-clamp-2">
-                    {category.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p class="text-sm text-muted-foreground">
-                    {category.promptCount} prompts available
-                  </p>
-                </CardContent>
-              </Card>
-            </a>
-          );
-        })}
+        {
+          categories.map((category, idx) => {
+            const IconComponent = iconMap[category.icon];
+            return (
+              <a
+                href={`/directory?category=${category.categoryId}`}
+                class="block group"
+                style={{
+                  animation: `slideUpFadeIn 0.6s ease-out ${idx * 0.1}s both`,
+                }}
+              >
+                <Card className="card-hover h-full">
+                  <CardHeader>
+                    <div class="flex items-center gap-3 mb-2">
+                      {IconComponent && (
+                        <div class="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <IconComponent className="h-5 w-5" />
+                        </div>
+                      )}
+                      <CardTitle className="text-lg group-hover:text-primary transition-colors">
+                        {category.name}
+                      </CardTitle>
+                    </div>
+                    <CardDescription className="line-clamp-2">
+                      {category.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p class="text-sm text-muted-foreground">
+                      {category.promptCount} prompts available
+                    </p>
+                  </CardContent>
+                </Card>
+              </a>
+            );
+          })
+        }
       </div>
     </div>
   </section>
@@ -140,32 +193,44 @@ const iconMap: Record<string, any> = {
   <section class="section bg-muted/30">
     <div class="container">
       <div class="max-w-3xl mx-auto text-center mb-12">
-        <h2 class="text-3xl font-bold tracking-tight mb-4">
-          Featured Prompts
-        </h2>
+        <h2 class="text-3xl font-bold tracking-tight mb-4">Featured Prompts</h2>
         <p class="text-lg text-muted-foreground">
           Popular prompts from our community to get you started
         </p>
       </div>
-      
-      {convexUrl ? (
-        await (async () => {
-          try {
-            const response = await fetch(`${convexUrl}/api/query`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ path: 'prompts:getApprovedPrompts', args: { limit: 12 }, format: 'json' }),
-            });
-            const json = response.ok ? await response.json() : { value: [] };
-            const initialPrompts = (json.value || []).filter((p: any) => p.featured).slice(0, 6);
-            return (<FeaturedPrompts client:load convexUrl={convexUrl} initialPrompts={initialPrompts} />);
-          } catch (e) {
-            return (<FeaturedPrompts client:load convexUrl={convexUrl} />);
-          }
-        })()
-      ) : (
-        <FeaturedPrompts client:load convexUrl={convexUrl} />
-      )}
+
+      {
+        convexUrl ? (
+          await (async () => {
+            try {
+              const response = await fetch(`${convexUrl}/api/query`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  path: "prompts:getApprovedPrompts",
+                  args: { limit: 12 },
+                  format: "json",
+                }),
+              });
+              const json = response.ok ? await response.json() : { value: [] };
+              const initialPrompts = (json.value || [])
+                .filter((p: any) => p.featured)
+                .slice(0, 6);
+              return (
+                <FeaturedPrompts
+                  client:load
+                  convexUrl={convexUrl}
+                  initialPrompts={initialPrompts}
+                />
+              );
+            } catch (e) {
+              return <FeaturedPrompts client:load convexUrl={convexUrl} />;
+            }
+          })()
+        ) : (
+          <FeaturedPrompts client:load convexUrl={convexUrl} />
+        )
+      }
 
       <div class="text-center mt-12">
         <Button size="lg" variant="outline" asChild>
@@ -186,7 +251,8 @@ const iconMap: Record<string, any> = {
           Ready to enhance your ministry with AI?
         </h2>
         <p class="text-lg text-muted-foreground">
-          Join our community of church leaders sharing and discovering AI prompts
+          Join our community of church leaders sharing and discovering AI
+          prompts
         </p>
         <div class="flex flex-col sm:flex-row gap-4 justify-center pt-4">
           <Button size="lg" asChild>
