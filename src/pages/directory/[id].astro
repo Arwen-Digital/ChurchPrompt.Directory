@@ -3,81 +3,7 @@ import MainLayout from '@/layouts/MainLayout.astro';
 import { ArrowLeft } from 'lucide-react';
 import { PromptDetailWithProvider } from '@/components/prompts/PromptDetailWithProvider';
 
-export const prerender = true;
-
-export async function getStaticPaths() {
-  const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
-  
-  if (!convexUrl) {
-    console.error('[getStaticPaths] PUBLIC_CONVEX_URL not set');
-    return [];
-  }
-
-  try {
-    console.log('[getStaticPaths] Fetching prompt IDs from Convex...');
-    const idsResp = await fetch(`${convexUrl}/api/query`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        path: 'prompts:getAllPromptIds',
-        args: {},
-        format: 'json',
-      }),
-    });
-    
-    if (!idsResp.ok) {
-      console.warn(`[getStaticPaths] Convex HTTP error ${idsResp.status} - skipping prerender`);
-      return [];
-    }
-    
-    const idsJson = await idsResp.json();
-    
-    if (idsJson.status === 'error') {
-      console.warn('[getStaticPaths] Convex returned error - skipping prerender:', idsJson.errorMessage);
-      return [];
-    }
-    
-    const ids: { _id: string }[] = idsJson.value || [];
-    console.log(`[getStaticPaths] Found ${ids.length} prompts to prerender`);
-    
-    if (ids.length === 0) {
-      console.warn('[getStaticPaths] No prompts found - skipping prerender');
-      return [];
-    }
-    
-    // Parallel fetch each prompt
-    const promptsData = await Promise.all(
-      ids.map(async (p) => {
-        try {
-          const promptResp = await fetch(`${convexUrl}/api/query`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              path: 'prompts:getPromptById',
-              args: { id: p._id },
-              format: 'json',
-            }),
-          });
-          if (!promptResp.ok) return null;
-          const promptJson = await promptResp.json();
-          return { id: p._id, data: promptJson.value };
-        } catch {
-          return null;
-        }
-      })
-    );
-    
-    const validPaths = promptsData
-      .filter((p) => p && p.data)
-      .map((p: any) => ({ params: { id: p.id }, props: { promptData: p.data } }));
-    
-    console.log(`[getStaticPaths] Generated ${validPaths.length} static paths`);
-    return validPaths;
-  } catch (error) {
-    console.warn('[getStaticPaths] Error during prerender (will render on-demand):', error);
-    return [];
-  }
-}
+export const prerender = false;
 
 const { id } = Astro.params;
 // @ts-ignore
@@ -100,7 +26,6 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
   <Fragment slot="head">
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
-    
     {promptData && (
       <>
         <!-- Open Graph / Facebook -->
@@ -116,29 +41,24 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
         {promptData.tags.map((tag: string) => (
           <meta property="article:tag" content={tag} />
         ))}
-        
         <!-- Twitter Card -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content={canonicalURL} />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        
         <!-- Additional SEO -->
         <meta name="keywords" content={`AI prompt, ${promptData.category} prompt, church AI, ChatGPT prompt, ministry AI, ${promptData.tags.join(', ')}, AI for churches, prompt example, free church prompt, ${promptData.category} AI tool`} />
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
         <meta name="author" content={promptData.authorName} />
         <meta http-equiv="content-language" content="en-US" />
-        
         <!-- Additional Open Graph -->
         <meta property="og:locale" content="en_US" />
         <meta property="article:publisher" content="Church Prompt Directory" />
-        
         <!-- Additional Twitter -->
         <meta name="twitter:label1" content="Category" />
         <meta name="twitter:data1" content={promptData.category} />
         <meta name="twitter:label2" content="Reading time" />
         <meta name="twitter:data2" content="2 min read" />
-        
         <!-- JSON-LD Structured Data -->
         <script type="application/ld+json" set:html={JSON.stringify({
           "@context": "https://schema.org",
