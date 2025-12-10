@@ -213,7 +213,7 @@ const iconMap: Record<string, any> = {
                 }),
               });
               const json = response.ok ? await response.json() : { value: [] };
-              const initialPrompts = (json.value || [])
+              const initialPrompts = (json.value?.prompts || [])
                 .filter((p: any) => p.featured)
                 .slice(0, 6);
               return (
