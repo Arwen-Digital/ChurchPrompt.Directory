@@ -10,10 +10,11 @@ interface FeaturedPromptsProps {
 
 function FeaturedPromptsContent({ initialPrompts }: { initialPrompts?: any[] }) {
   // Fetch featured prompts from Convex
-  const prompts = useQuery(api.prompts.getApprovedPrompts, { limit: 6 });
-  
+  const queryResult = useQuery(api.prompts.getApprovedPrompts, { limit: 6 });
+  const fetchedPrompts = queryResult?.prompts;
+
   // Filter for featured prompts
-  const source = prompts === undefined && initialPrompts ? initialPrompts : (prompts || []);
+  const source = queryResult === undefined && initialPrompts ? initialPrompts : (fetchedPrompts || []);
   const featuredPrompts = source.filter((p: any) => p.featured).slice(0, 6);
 
   return <PromptGrid prompts={featuredPrompts} />;
