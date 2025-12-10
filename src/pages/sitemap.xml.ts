@@ -72,9 +72,9 @@ export async function GET({ request }: { request: Request }) {
 
     // 3. Add Dynamic Prompts
     prompts.forEach((prompt) => {
-        if (prompt._id) {
+        if (prompt.id) {
             items.push({
-                url: `${siteUrl}/directory/${prompt._id}`,
+                url: `${siteUrl}/directory/${prompt.id}`,
                 lastMod: new Date(prompt.updatedAt || prompt.createdAt).toISOString(),
                 changeFreq: 'weekly',
                 priority: 0.7,
