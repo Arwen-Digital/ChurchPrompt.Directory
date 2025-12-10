@@ -9,10 +9,11 @@ export const getApprovedPrompts = query({
     category: v.optional(v.string()),
     search: v.optional(v.string()),
     limit: v.optional(v.number()),
+    page: v.optional(v.number()),
     sort: v.optional(v.string()), // placeholder: "usage" | "recent" | "featured"
   },
   handler: async ({ db }, args) => {
-    const { category, search, limit, sort } = args;
+    const { category, search, limit = 50, page = 1, sort } = args;
 
     // Base: status approved index scan
     let q = db.query("prompts").withIndex("by_status", (x) => x.eq("status", "approved"));
@@ -29,8 +30,6 @@ export const getApprovedPrompts = query({
     } else {
       results = await q.collect();
     }
-    // If category path executed above results already assigned; ensure results variable exists.
-    // (Declaration moved earlier.)
 
     // Search filtering (case-insensitive across title, content, tags)
     if (search) {
@@ -66,11 +65,17 @@ export const getApprovedPrompts = query({
         });
     }
 
-    if (limit && limit > 0) {
-      sorted = sorted.slice(0, limit);
+    const totalCount = sorted.length;
+    const totalPages = Math.ceil(totalCount / limit);
+    const currentPage = Math.max(1, Math.min(page, totalPages || 1));
+
+    // Slice for pagination
+    if (limit > 0) {
+      const start = (currentPage - 1) * limit;
+      sorted = sorted.slice(start, start + limit);
     }
 
-    return sorted.map((p: any) => ({
+    const prompts = sorted.map((p: any) => ({
       id: p._id,
       title: p.title,
       excerpt: p.excerpt,
@@ -82,6 +87,13 @@ export const getApprovedPrompts = query({
       createdAt: p.createdAt,
       featured: p.featured,
     }));
+
+    return {
+      prompts,
+      totalCount,
+      page: currentPage,
+      totalPages,
+    };
   },
 });
 
@@ -229,8 +241,8 @@ export const createPrompt = mutation({
     const { title, content, category, tags } = args;
 
     // Generate excerpt from content (first 150 chars)
-    const excerpt = content.length > 150 
-      ? content.substring(0, 150) + '...' 
+    const excerpt = content.length > 150
+      ? content.substring(0, 150) + '...'
       : content;
 
     // Get author name from users table
@@ -238,7 +250,7 @@ export const createPrompt = mutation({
       .query("users")
       .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
       .first();
-    
+
     const authorName = user?.name || identity.email?.split('@')[0] || 'Anonymous';
 
     const promptId = await db.insert("prompts", {
@@ -334,12 +346,12 @@ export const updatePrompt = mutation({
     if (category !== undefined) updates.category = category;
     if (tags !== undefined) updates.tags = tags;
     if (featured !== undefined) updates.featured = featured;
-    
+
     if (content !== undefined) {
       updates.content = content;
       // Update excerpt when content changes
-      updates.excerpt = content.length > 150 
-        ? content.substring(0, 150) + '...' 
+      updates.excerpt = content.length > 150
+        ? content.substring(0, 150) + '...'
         : content;
     }
 
@@ -374,7 +386,7 @@ export const getAllPromptIds = query({
       .query("prompts")
       .withIndex("by_status", (q) => q.eq("status", "approved"))
       .collect();
-    
+
     return prompts.map((prompt) => ({ _id: prompt._id }));
   },
 });

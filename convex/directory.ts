@@ -51,6 +51,19 @@ export const getDirectoryBootData = query({
       .withIndex("by_status", (q) => q.eq("status", "approved"))
       .collect();
 
+    // Calculate actual prompt counts per category from approved prompts
+    const categoryCountMap = new Map<string, number>();
+    approved.forEach((p: any) => {
+      const count = categoryCountMap.get(p.category) || 0;
+      categoryCountMap.set(p.category, count + 1);
+    });
+
+    // Update category promptCount with actual counts
+    const categoriesWithCounts = categories.map((cat: any) => ({
+      ...cat,
+      promptCount: categoryCountMap.get(cat.categoryId) || 0,
+    }));
+
     const recentPrompts: PromptSummary[] = approved
       .sort((a: any, b: any) => b.createdAt - a.createdAt)
       .slice(0, 3)
@@ -68,7 +81,7 @@ export const getDirectoryBootData = query({
       }));
 
     return {
-      categories,
+      categories: categoriesWithCounts,
       recentPrompts,
       meta: {
         categoryCount: categories.length,
