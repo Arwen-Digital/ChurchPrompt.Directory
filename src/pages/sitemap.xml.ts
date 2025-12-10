@@ -11,7 +11,12 @@ interface SitemapItem {
 
 export async function GET({ request }: { request: Request }) {
     const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
-    const siteUrl = import.meta.env.PUBLIC_SITE_URL || new URL(request.url).origin;
+    let siteUrl = import.meta.env.PUBLIC_SITE_URL || new URL(request.url).origin;
+
+    // Remove trailing slash if present to avoid double slashes
+    if (siteUrl.endsWith('/')) {
+        siteUrl = siteUrl.slice(0, -1);
+    }
 
     if (!convexUrl) {
         return new Response('PUBLIC_CONVEX_URL not set', { status: 500 });
@@ -67,22 +72,26 @@ export async function GET({ request }: { request: Request }) {
 
     // 3. Add Dynamic Prompts
     prompts.forEach((prompt) => {
-        items.push({
-            url: `${siteUrl}/directory/${prompt._id}`,
-            lastMod: new Date(prompt.updatedAt || prompt.createdAt).toISOString(),
-            changeFreq: 'weekly',
-            priority: 0.7,
-        });
+        if (prompt._id) {
+            items.push({
+                url: `${siteUrl}/directory/${prompt._id}`,
+                lastMod: new Date(prompt.updatedAt || prompt.createdAt).toISOString(),
+                changeFreq: 'weekly',
+                priority: 0.7,
+            });
+        }
     });
 
     // 4. Add Dynamic Blogs
     blogs.forEach((blog) => {
-        items.push({
-            url: `${siteUrl}/blogs/${blog.slug}`,
-            lastMod: new Date(blog.updatedAt || blog.createdAt).toISOString(),
-            changeFreq: 'monthly',
-            priority: 0.7,
-        });
+        if (blog.slug) {
+            items.push({
+                url: `${siteUrl}/blogs/${blog.slug}`,
+                lastMod: new Date(blog.updatedAt || blog.createdAt).toISOString(),
+                changeFreq: 'monthly',
+                priority: 0.7,
+            });
+        }
     });
 
     // 5. Generate XML
