@@ -2,16 +2,35 @@
 import MainLayout from '@/layouts/MainLayout.astro';
 import { ArrowLeft } from 'lucide-react';
 import { PromptDetailWithProvider } from '@/components/prompts/PromptDetailWithProvider';
+import { ConvexHttpClient } from "convex/browser";
+import { api } from "../../../convex/_generated/api";
+import type { Id } from "../../../convex/_generated/dataModel";
 
 export const prerender = false;
 
 const { id } = Astro.params;
-// @ts-ignore
-const { promptData } = Astro.props as { promptData: any };
 if (!id) return Astro.redirect('/404');
+
+// @ts-ignore
+let { promptData } = Astro.props as { promptData: any };
+
+// If no promptData passed (SSR direct hit), fetch it
+if (!promptData) {
+  try {
+    const convex = new ConvexHttpClient(import.meta.env.PUBLIC_CONVEX_URL);
+    promptData = await convex.query(api.prompts.getPromptById, { id: id as Id<"prompts"> });
+  } catch (error) {
+    console.error("Error fetching prompt:", error);
+    // If fetch fails (e.g. invalid ID format), redirect to 404
+    return Astro.redirect('/404');
+  }
+}
+
+if (!promptData) return Astro.redirect('/404');
 
 let title = "AI Prompt for Church Ministry | Church Prompt Directory";
 let description = "Discover this AI prompt for church ministry. Free ChatGPT prompt designed for pastors and church leaders. Copy and use this proven AI prompt instantly.";
+
 if (promptData) {
   title = `${promptData.title} - AI Prompt for ${promptData.category} | Church Prompt Directory`;
   const excerptText = promptData.excerpt || (promptData.content || '').substring(0, 120);
