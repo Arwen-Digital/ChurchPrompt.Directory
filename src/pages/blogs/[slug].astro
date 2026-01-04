@@ -1,11 +1,11 @@
 ---
-import MainLayout from '@/layouts/MainLayout.astro';
-import { marked } from 'marked';
+import MainLayout from "@/layouts/MainLayout.astro";
+import { marked } from "marked";
 
 const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
 
 if (!convexUrl) {
-  throw new Error('PUBLIC_CONVEX_URL is not set');
+  throw new Error("PUBLIC_CONVEX_URL is not set");
 }
 
 export const prerender = false;
@@ -37,48 +37,50 @@ let title = "Blog Post | Church Prompt Directory";
 let description = "Read our latest insights and tips for church ministry.";
 let keywords = "church, ministry, AI prompts, spiritual growth";
 let ogImage = "";
-let canonicalUrl = `${Astro.site?.toString() || 'https://churchprompt.directory'}/blogs/${slug}`;
+let canonicalUrl = `${Astro.site?.toString() || "https://churchprompt.directory"}/blogs/${slug}`;
 
 try {
   // Use Convex HTTP API directly (works in any environment)
   const response = await fetch(`${convexUrl}/api/query`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      path: 'blogs:getBlogBySlug',
-      args: { slug: slug || '' },
+      path: "blogs:getBlogBySlug",
+      args: { slug: slug || "" },
     }),
   });
-  
+
   if (response.ok) {
     const result = await response.json();
     blog = result.value;
   }
-  
+
   if (blog) {
     title = `${blog.title} | Church Prompt Directory`;
     description = blog.metaDescription || blog.excerpt;
-    keywords = blog.metaKeywords.join(', ');
-    ogImage = blog.featuredImage || `${Astro.site?.toString() || 'https://churchprompt.directory'}/og-image.png`;
+    keywords = blog.metaKeywords.join(", ");
+    ogImage =
+      blog.featuredImage ||
+      `${Astro.site?.toString() || "https://churchprompt.directory"}/og-image.png`;
   }
 } catch (error) {
-  console.error('Error fetching blog for SSR:', error);
+  console.error("Error fetching blog for SSR:", error);
 }
 
 // If blog not found, return 404
 if (!blog) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
 // Format date helper
 function formatDate(timestamp: number | undefined): string {
-  if (!timestamp) return '';
-  return new Date(timestamp).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  if (!timestamp) return "";
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   });
 }
 
@@ -92,8 +94,8 @@ marked.setOptions({
 const contentHtml = marked.parse(blog.content);
 ---
 
-<MainLayout 
-  title={title} 
+<MainLayout
+  title={title}
   description={description}
   keywords={keywords}
   ogTitle={title}
@@ -104,7 +106,7 @@ const contentHtml = marked.parse(blog.content);
 >
   <style is:global>
     .blog-content p {
-    margin-bottom: 1em !important;
+      margin-bottom: 1em !important;
       margin-top: 0 !important;
     }
 
@@ -114,56 +116,101 @@ const contentHtml = marked.parse(blog.content);
       transition: all 0.2s;
     }
   </style>
-  
-    <article itemscope itemtype="https://schema.org/BlogPosting" class="w-full">
-      <!-- Header Section -->
-      <header class="max-w-[700px] mx-auto mb-12 mt-8">
-        <h1 class="text-[32px] md:text-[42px] font-bold tracking-tight mb-2 text-[#242424] leading-[1.15]" itemprop="headline" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">{blog.title}</h1>
-        
-        {blog.excerpt && (
-          <p class="text-[20px] md:text-[22px] text-[#6B6B6B] mb-8 leading-[1.4] mt-2" itemprop="description" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+
+  <article itemscope itemtype="https://schema.org/BlogPosting" class="w-full">
+    <!-- Header Section -->
+    <header class="max-w-[700px] mx-auto mb-12 mt-8 px-5 md:px-0">
+      <h1
+        class="text-[32px] md:text-[42px] font-bold tracking-tight mb-2 text-[#242424] leading-[1.15]"
+        itemprop="headline"
+        style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+      >
+        {blog.title}
+      </h1>
+
+      {
+        blog.excerpt && (
+          <p
+            class="text-[20px] md:text-[22px] text-[#6B6B6B] mb-8 leading-[1.4] mt-2"
+            itemprop="description"
+            style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+          >
             {blog.excerpt}
           </p>
-        )}
+        )
+      }
 
-        <!-- Author / Meta -->
-        <div class="flex items-center gap-3 text-[14px]">
-          <div class="w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden">
-             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-muted-foreground"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <div class="flex flex-col leading-snug">
-            <span itemprop="author" itemscope itemtype="https://schema.org/Person" class="font-medium text-[#242424]" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-              <span itemprop="name">{blog.authorName}</span>
-            </span>
-            <div class="flex items-center gap-1 text-[#6B6B6B]" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-              <span>5 min read</span>
-              <span>·</span>
-              <time datetime={blog.publishedAt ? new Date(blog.publishedAt).toISOString() : ''} itemprop="datePublished">
-                {formatDate(blog.publishedAt)}
-              </time>
-            </div>
+      <!-- Author / Meta -->
+      <div class="flex items-center gap-3 text-[14px]">
+        <div
+          class="w-10 h-10 rounded-full bg-muted flex items-center justify-center overflow-hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-muted-foreground"
+            ><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle
+              cx="12"
+              cy="7"
+              r="4"></circle></svg
+          >
+        </div>
+        <div class="flex flex-col leading-snug">
+          <span
+            itemprop="author"
+            itemscope
+            itemtype="https://schema.org/Person"
+            class="font-medium text-[#242424]"
+            style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+          >
+            <span itemprop="name">{blog.authorName}</span>
+          </span>
+          <div
+            class="flex items-center gap-1 text-[#6B6B6B]"
+            style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+          >
+            <span>5 min read</span>
+            <span>·</span>
+            <time
+              datetime={blog.publishedAt
+                ? new Date(blog.publishedAt).toISOString()
+                : ""}
+              itemprop="datePublished"
+            >
+              {formatDate(blog.publishedAt)}
+            </time>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
 
-      <!-- Featured Image (Wide) -->
-      {blog.featuredImage && (
-         <div class="max-w-screen-lg mx-auto mb-14">
-            <div class="aspect-[2/1] w-full overflow-hidden bg-muted">
-              <img 
-                src={blog.featuredImage} 
-                alt={blog.title}
-                class="w-full h-full object-cover"
-                itemprop="image"
-              />
-            </div>
-         </div>
-      )}
+    <!-- Featured Image (Wide) -->
+    {
+      blog.featuredImage && (
+        <div class="max-w-screen-lg mx-auto mb-14">
+          <div class="aspect-[2/1] w-full overflow-hidden bg-muted">
+            <img
+              src={blog.featuredImage}
+              alt={blog.title}
+              class="w-full h-full object-cover"
+              itemprop="image"
+            />
+          </div>
+        </div>
+      )
+    }
 
-      <!-- Content -->
-      <div class="max-w-[700px] mx-auto mb-20">
-          <div 
-            class="blog-content prose prose-slate dark:prose-invert max-w-none
+    <!-- Content -->
+    <div class="max-w-[700px] mx-auto mb-20 px-5 md:px-0">
+      <div
+        class="blog-content prose prose-slate dark:prose-invert max-w-none
               text-[20px] leading-[1.58] text-[rgba(41,41,41,1)]
               prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-[#242424]
               prose-headings:font-sans
@@ -178,31 +225,50 @@ const contentHtml = marked.parse(blog.content);
               prose-img:my-[2em] prose-img:w-full
               prose-code:font-mono prose-code:text-[0.85em] prose-code:bg-[#F2F2F2] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
               prose-pre:bg-[#F9F9F9] prose-pre:p-6 prose-pre:rounded-sm prose-pre:my-[1.5em]"
-            itemprop="articleBody"
-            set:html={contentHtml}
-            style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+        itemprop="articleBody"
+        set:html={contentHtml}
+        style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+      />
+
+      <!-- Tags -->
+      {
+        blog.tags.length > 0 && (
+          <div class="mt-14 pt-8 flex flex-wrap gap-2">
+            {blog.tags.map((tag) => (
+              <a
+                href={`/blogs?tag=${tag}`}
+                class="inline-flex items-center rounded-full bg-[#F2F2F2] px-4 py-2 text-[14px] text-[#242424] hover:bg-[#E6E6E6] transition-colors"
+                style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+              >
+                {tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+
+      <!-- Footer navigation -->
+      <div class="mt-10 py-8 border-t border-[#F2F2F2]">
+        <a
+          href="/blogs"
+          class="text-[15px] font-medium text-[#6B6B6B] hover:text-[#242424] transition-colors flex items-center gap-2"
+          style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg
           >
-          </div>
-
-          <!-- Tags -->
-          {blog.tags.length > 0 && (
-            <div class="mt-14 pt-8 flex flex-wrap gap-2">
-              {blog.tags.map((tag) => (
-                <a href={`/blogs?tag=${tag}`} class="inline-flex items-center rounded-full bg-[#F2F2F2] px-4 py-2 text-[14px] text-[#242424] hover:bg-[#E6E6E6] transition-colors" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                  {tag}
-                </a>
-              ))}
-            </div>
-          )}
-
-          <!-- Footer navigation -->
-          <div class="mt-10 py-8 border-t border-[#F2F2F2]">
-            <a href="/blogs" class="text-[15px] font-medium text-[#6B6B6B] hover:text-[#242424] transition-colors flex items-center gap-2" style="font-family: sohne, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-              Back to all posts
-            </a>
-          </div>
+          Back to all posts
+        </a>
       </div>
-    </article>
-  </div>
+    </div>
+  </article>
 </MainLayout>
