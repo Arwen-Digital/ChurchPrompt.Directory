@@ -63,7 +63,7 @@ try {
     keywords = blog.metaKeywords.join(", ");
     ogImage =
       blog.featuredImage ||
-      `${Astro.site?.toString() || "https://churchprompt.directory"}/og-image.png`;
+      `${Astro.site?.toString() || "https://churchprompt.directory"}/blog-og-default.png`;
   }
 } catch (error) {
   console.error("Error fetching blog for SSR:", error);
