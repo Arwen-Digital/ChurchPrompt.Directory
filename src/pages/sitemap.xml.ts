@@ -68,6 +68,8 @@ export async function GET({ request }: { request: Request }) {
         { url: `${siteUrl}/directory`, changeFreq: 'daily', priority: 0.9 },
         { url: `${siteUrl}/blogs`, changeFreq: 'weekly', priority: 0.8 },
         { url: `${siteUrl}/submit`, changeFreq: 'monthly', priority: 0.5 },
+        { url: `${siteUrl}/privacy`, changeFreq: 'monthly', priority: 0.3 },
+        { url: `${siteUrl}/terms`, changeFreq: 'monthly', priority: 0.3 },
     ];
 
     // 3. Add Dynamic Prompts

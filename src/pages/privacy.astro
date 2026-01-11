@@ -1,0 +1,151 @@
+---
+export const prerender = true;
+
+import MainLayout from "@/layouts/MainLayout.astro";
+
+const title = "Privacy Policy | Church Prompt Directory";
+const description = "Privacy Policy for Church Prompt Directory. Learn how we collect, use, and protect your data.";
+const canonicalUrl = new URL("/privacy", Astro.site);
+---
+
+<MainLayout title={title} description={description} canonicalUrl={canonicalUrl.toString()}>
+  <div class="container py-12">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold mb-4">Privacy Policy</h1>
+      <p class="text-muted-foreground mb-8">Last updated: January 11, 2026</p>
+
+      <div class="prose prose-slate dark:prose-invert max-w-none space-y-6">
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">1. Introduction</h2>
+          <p>
+            Welcome to Church Prompt Directory ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website churchprompt.directory.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">2. Information We Collect</h2>
+          <h3 class="text-xl font-semibold mb-3">2.1 Personal Information</h3>
+          <p>
+            When you register for an account, we collect personal information that you provide to us, including:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Name and email address</li>
+            <li>Account credentials (managed securely through Clerk)</li>
+            <li>Profile information you choose to provide</li>
+            <li>Content you submit (prompts, comments, etc.)</li>
+          </ul>
+
+          <h3 class="text-xl font-semibold mb-3 mt-6">2.2 Usage Data</h3>
+          <p>
+            We automatically collect certain information when you visit, use, or navigate our website:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Log and usage data (IP address, browser type, pages visited)</li>
+            <li>Device information (device type, operating system)</li>
+            <li>Analytics data through Google Analytics</li>
+            <li>Cookies and similar tracking technologies</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">3. How We Use Your Information</h2>
+          <p>We use the information we collect to:</p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Provide, operate, and maintain our services</li>
+            <li>Improve, personalize, and expand our services</li>
+            <li>Understand and analyze how you use our website</li>
+            <li>Develop new products, services, features, and functionality</li>
+            <li>Communicate with you about updates, support, and promotional messages</li>
+            <li>Send you technical notices and security alerts</li>
+            <li>Prevent fraud and enhance security</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">4. Third-Party Services</h2>
+          <p>We use the following third-party services that may collect information:</p>
+          
+          <h3 class="text-xl font-semibold mb-3 mt-4">4.1 Clerk (Authentication)</h3>
+          <p>
+            We use Clerk for authentication and user management. Clerk processes your account information according to their privacy policy. Visit <a href="https://clerk.com/privacy" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Clerk's Privacy Policy</a> for more information.
+          </p>
+
+          <h3 class="text-xl font-semibold mb-3 mt-4">4.2 Convex (Database)</h3>
+          <p>
+            We use Convex as our backend database service. Your data is stored securely on Convex's infrastructure. Visit <a href="https://www.convex.dev/privacy" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Convex's Privacy Policy</a> for more information.
+          </p>
+
+          <h3 class="text-xl font-semibold mb-3 mt-4">4.3 Google Analytics</h3>
+          <p>
+            We use Google Analytics to analyze website traffic and usage. Google Analytics uses cookies to collect information. You can opt-out of Google Analytics by installing the <a href="https://tools.google.com/dlpage/gaoptout" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a>.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">5. Cookies and Tracking Technologies</h2>
+          <p>
+            We use cookies and similar tracking technologies to track activity on our website and store certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our website.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">6. Data Security</h2>
+          <p>
+            We implement appropriate technical and organizational security measures to protect your personal information. However, no method of transmission over the Internet or electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your data, we cannot guarantee absolute security.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">7. Data Retention</h2>
+          <p>
+            We retain your personal information only for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">8. Your Privacy Rights</h2>
+          <p>Depending on your location, you may have the following rights:</p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li><strong>Access:</strong> Request a copy of your personal data</li>
+            <li><strong>Correction:</strong> Request correction of inaccurate data</li>
+            <li><strong>Deletion:</strong> Request deletion of your personal data</li>
+            <li><strong>Data Portability:</strong> Request transfer of your data</li>
+            <li><strong>Opt-out:</strong> Opt-out of marketing communications</li>
+          </ul>
+          <p class="mt-4">
+            To exercise these rights, please contact us using the information provided below.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">9. Children's Privacy</h2>
+          <p>
+            Our services are not directed to individuals under the age of 13. We do not knowingly collect personal information from children under 13. If you become aware that a child has provided us with personal information, please contact us.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">10. Changes to This Privacy Policy</h2>
+          <p>
+            We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date at the top of this policy.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">11. Contact Us</h2>
+          <p>
+            If you have any questions about this Privacy Policy, please contact us:
+          </p>
+          <ul class="list-none space-y-2 mt-4">
+            <li>By visiting this page on our website: <a href="/subscribe" class="text-primary hover:underline">churchprompt.directory/subscribe</a></li>
+            <li>By email: (contact information will be provided)</li>
+          </ul>
+        </section>
+
+        <div class="mt-12 pt-8 border-t">
+          <a href="/" class="text-primary hover:underline">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>

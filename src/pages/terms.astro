@@ -1,0 +1,203 @@
+---
+export const prerender = true;
+
+import MainLayout from "@/layouts/MainLayout.astro";
+
+const title = "Terms of Service | Church Prompt Directory";
+const description = "Terms of Service for Church Prompt Directory. Read our terms and conditions for using our AI prompt library.";
+const canonicalUrl = new URL("/terms", Astro.site);
+---
+
+<MainLayout title={title} description={description} canonicalUrl={canonicalUrl.toString()}>
+  <div class="container py-12">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl font-bold mb-4">Terms of Service</h1>
+      <p class="text-muted-foreground mb-8">Last updated: January 11, 2026</p>
+
+      <div class="prose prose-slate dark:prose-invert max-w-none space-y-6">
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
+          <p>
+            By accessing and using Church Prompt Directory ("the Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these Terms of Service, please do not use the Service.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">2. Description of Service</h2>
+          <p>
+            Church Prompt Directory is a platform that provides a collection of AI prompts designed specifically for church ministry, pastoral care, sermon preparation, and other church-related activities. The Service allows users to:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Browse and search AI prompts</li>
+            <li>Submit their own prompts for community use</li>
+            <li>Copy and use prompts with AI tools</li>
+            <li>Share prompts with others</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">3. User Accounts</h2>
+          <h3 class="text-xl font-semibold mb-3">3.1 Account Creation</h3>
+          <p>
+            To access certain features of the Service, you must create an account. You agree to:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Provide accurate, current, and complete information</li>
+            <li>Maintain and promptly update your account information</li>
+            <li>Maintain the security of your account credentials</li>
+            <li>Notify us immediately of any unauthorized use of your account</li>
+          </ul>
+
+          <h3 class="text-xl font-semibold mb-3 mt-6">3.2 Account Responsibility</h3>
+          <p>
+            You are responsible for all activities that occur under your account. We are not liable for any loss or damage arising from your failure to maintain account security.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">4. User Content and Conduct</h2>
+          <h3 class="text-xl font-semibold mb-3">4.1 Content Submission</h3>
+          <p>
+            When you submit prompts or other content to the Service, you represent and warrant that:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>You own or have the necessary rights to submit the content</li>
+            <li>The content does not violate any third-party rights</li>
+            <li>The content is accurate and not misleading</li>
+            <li>The content complies with these Terms and applicable laws</li>
+          </ul>
+
+          <h3 class="text-xl font-semibold mb-3 mt-6">4.2 Content License</h3>
+          <p>
+            By submitting content to the Service, you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, adapt, publish, translate, and distribute your content in connection with the Service.
+          </p>
+
+          <h3 class="text-xl font-semibold mb-3 mt-6">4.3 Prohibited Content</h3>
+          <p>
+            You agree not to submit content that:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Is illegal, harmful, threatening, abusive, or offensive</li>
+            <li>Infringes on intellectual property rights</li>
+            <li>Contains malware or malicious code</li>
+            <li>Promotes discrimination, hatred, or violence</li>
+            <li>Is spam or unsolicited advertising</li>
+            <li>Violates the privacy of others</li>
+            <li>Contains false or misleading information</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">5. AI and Content Disclaimer</h2>
+          <p>
+            The prompts provided on this Service are designed for use with AI tools and language models. You acknowledge that:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>AI-generated content may contain errors or inaccuracies</li>
+            <li>Prompts are provided as suggestions and templates only</li>
+            <li>You should review and verify all AI-generated content before use</li>
+            <li>We do not guarantee the theological accuracy of AI responses</li>
+            <li>The Service is a tool to assist ministry, not replace pastoral judgment</li>
+            <li>You are responsible for how you use and apply AI-generated content</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">6. Intellectual Property</h2>
+          <h3 class="text-xl font-semibold mb-3">6.1 Our Property</h3>
+          <p>
+            The Service and its original content (excluding user-submitted content), features, and functionality are owned by Church Prompt Directory and are protected by international copyright, trademark, and other intellectual property laws.
+          </p>
+
+          <h3 class="text-xl font-semibold mb-3 mt-6">6.2 Community Prompts</h3>
+          <p>
+            Prompts submitted by users are intended for community use. By submitting a prompt, you agree to share it with the community under these Terms.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">7. Termination</h2>
+          <p>
+            We reserve the right to terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including but not limited to:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Violation of these Terms of Service</li>
+            <li>Fraudulent or illegal activity</li>
+            <li>Abuse of the Service or other users</li>
+            <li>At our sole discretion</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">8. Disclaimer of Warranties</h2>
+          <p>
+            THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Warranties of merchantability or fitness for a particular purpose</li>
+            <li>Warranties that the Service will be uninterrupted or error-free</li>
+            <li>Warranties regarding the accuracy or reliability of content</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">9. Limitation of Liability</h2>
+          <p>
+            TO THE MAXIMUM EXTENT PERMITTED BY LAW, CHURCH PROMPT DIRECTORY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES RESULTING FROM:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Your access to or use of (or inability to access or use) the Service</li>
+            <li>Any conduct or content of any third party on the Service</li>
+            <li>Any content obtained from the Service</li>
+            <li>Unauthorized access, use, or alteration of your content</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">10. Indemnification</h2>
+          <p>
+            You agree to indemnify, defend, and hold harmless Church Prompt Directory and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses arising out of or in any way connected with:
+          </p>
+          <ul class="list-disc pl-6 space-y-2">
+            <li>Your access to or use of the Service</li>
+            <li>Your violation of these Terms</li>
+            <li>Your violation of any third-party rights</li>
+            <li>Your content submitted to the Service</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">11. Governing Law</h2>
+          <p>
+            These Terms shall be governed and construed in accordance with applicable laws, without regard to its conflict of law provisions.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">12. Changes to Terms</h2>
+          <p>
+            We reserve the right to modify or replace these Terms at any time at our sole discretion. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.
+          </p>
+          <p class="mt-4">
+            By continuing to access or use our Service after revisions become effective, you agree to be bound by the revised terms.
+          </p>
+        </section>
+
+        <section>
+          <h2 class="text-2xl font-semibold mb-4">13. Contact Information</h2>
+          <p>
+            If you have any questions about these Terms, please contact us:
+          </p>
+          <ul class="list-none space-y-2 mt-4">
+            <li>By visiting: <a href="/subscribe" class="text-primary hover:underline">churchprompt.directory/subscribe</a></li>
+            <li>By email: (contact information will be provided)</li>
+          </ul>
+        </section>
+
+        <div class="mt-12 pt-8 border-t">
+          <a href="/" class="text-primary hover:underline">← Back to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout>

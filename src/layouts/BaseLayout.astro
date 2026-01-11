@@ -25,7 +25,10 @@ const {
 const finalOgTitle = ogTitle || title;
 const finalOgDescription = ogDescription || description;
 const finalOgImage = ogImage || `${Astro.site?.toString() || 'https://churchprompt.directory'}/og-image.png`;
-const finalCanonicalUrl = canonicalUrl || Astro.url.toString();
+
+// Normalize canonical URL - always use pathname without query params
+const normalizedCanonical = canonicalUrl || new URL(Astro.url.pathname, Astro.site).toString();
+const finalCanonicalUrl = normalizedCanonical.split('?')[0]; // Remove query parameters
 ---
 
 <!doctype html>

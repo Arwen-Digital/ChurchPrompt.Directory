@@ -10,7 +10,7 @@ const title =
   "AI Prompts for Church Ministry - Browse ChatGPT & AI Prompts | Church Prompt Directory";
 const description =
   "Discover 100+ AI prompts for churches. Get ChatGPT prompts for sermons, pastoral care, worship planning, and ministry. Free AI prompt library for pastors and church leaders. Copy and use proven AI prompts instantly.";
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 
 // Get query parameters for dynamic SEO
 const categoryParam = Astro.url.searchParams.get("category");

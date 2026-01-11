@@ -37,7 +37,7 @@ if (promptData) {
   description = `AI Prompt: ${excerptText}${excerptText.length >= 120 ? '...' : ''} Free ChatGPT prompt for church ${promptData.category?.toLowerCase()}.`;
 }
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 ---
 
 <MainLayout title={title} description={description}>

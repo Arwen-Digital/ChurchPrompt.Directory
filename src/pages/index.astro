@@ -243,6 +243,88 @@ const iconMap: Record<string, any> = {
     </div>
   </section>
 
+  <!-- Recent Blog Posts Section -->
+  <section class="section border-b">
+    <div class="container">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <h2 class="text-3xl font-bold tracking-tight mb-4">Recent Blog Posts</h2>
+        <p class="text-lg text-muted-foreground">
+          Insights and tips for using AI in church ministry
+        </p>
+      </div>
+
+      {
+        convexUrl ? (
+          await (async () => {
+            try {
+              const response = await fetch(`${convexUrl}/api/query`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  path: "blogs:getPublishedBlogs",
+                  args: {},
+                  format: "json",
+                }),
+              });
+              const json = response.ok ? await response.json() : { value: [] };
+              const recentBlogs = (json.value || []).slice(0, 3);
+              
+              if (recentBlogs.length > 0) {
+                return (
+                  <div class="grid gap-6 md:grid-cols-3">
+                    {recentBlogs.map((blog: any) => (
+                      <a
+                        href={`/blogs/${blog.slug}`}
+                        class="block group rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow p-6"
+                      >
+                        <h3 class="text-xl font-semibold mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+                          {blog.title}
+                        </h3>
+                        <p class="text-muted-foreground text-sm mb-4 line-clamp-3">
+                          {blog.excerpt}
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>{blog.authorName}</span>
+                          <time datetime={blog.publishedAt ? new Date(blog.publishedAt).toISOString() : ""}>
+                            {new Date(blog.publishedAt || blog.createdAt).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })}
+                          </time>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                );
+              } else {
+                return (
+                  <p class="text-center text-muted-foreground">No blog posts yet. Check back soon!</p>
+                );
+              }
+            } catch (e) {
+              console.error("Error fetching recent blogs:", e);
+              return (
+                <p class="text-center text-muted-foreground">Unable to load blog posts.</p>
+              );
+            }
+          })()
+        ) : (
+          <p class="text-center text-muted-foreground">Unable to load blog posts.</p>
+        )
+      }
+
+      <div class="text-center mt-8">
+        <Button size="lg" variant="outline" asChild>
+          <a href="/blogs">
+            View All Blog Posts
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </a>
+        </Button>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA Section -->
   <section class="section border-t">
     <div class="container">
