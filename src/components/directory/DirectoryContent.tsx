@@ -79,7 +79,7 @@ export const DirectoryContent: React.FC<{ initialPrompts?: any[]; initialBootDat
 
   // Loading and error states
   const effectiveBoot = bootData || cachedBootData || initialBootData || null;
-  const isLoading = prompts === undefined && !initialPrompts || !effectiveBoot;
+  const isLoading = (prompts === undefined && !initialPrompts) || !effectiveBoot;
   // Fallback to initialPrompts only if we are on page 1 and no filters
   const promptList = (prompts === undefined && initialPrompts && currentPage === 1 && !searchQuery && selectedCategories.length === 0)
     ? initialPrompts
@@ -93,6 +93,19 @@ export const DirectoryContent: React.FC<{ initialPrompts?: any[]; initialBootDat
     icon: cat.icon,
     promptCount: cat.promptCount
   })) || [];
+
+  // Debug logging
+  console.log('[DirectoryContent] State:', {
+    bootData: bootData ? 'loaded' : 'undefined',
+    cachedBootData: cachedBootData ? 'present' : 'null',
+    initialBootData: initialBootData ? 'present' : 'null',
+    effectiveBoot: effectiveBoot ? 'present' : 'null',
+    categoriesCount: categories.length,
+    promptsResult: promptsResult ? 'loaded' : 'undefined',
+    prompts: prompts ? `${prompts.length} items` : 'undefined',
+    promptListCount: promptList.length,
+    isLoading
+  });
 
   // Initialize from URL params
   React.useEffect(() => {

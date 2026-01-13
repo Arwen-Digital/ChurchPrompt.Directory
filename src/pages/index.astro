@@ -28,6 +28,7 @@ const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
 let categories: any[] = [];
 if (convexUrl) {
   try {
+    console.log(`[Build] Fetching categories from: ${convexUrl}`);
     const response = await fetch(`${convexUrl}/api/query`, {
       method: "POST",
       headers: {
@@ -43,10 +44,15 @@ if (convexUrl) {
     if (response.ok) {
       const result = await response.json();
       categories = result.value || [];
+      console.log(`[Build] Fetched ${categories.length} categories successfully`);
+    } else {
+      console.error(`[Build] Failed to fetch categories: ${response.status} ${response.statusText}`);
     }
   } catch (error) {
-    console.error("Failed to fetch categories:", error);
+    console.error("[Build] Error fetching categories:", error);
   }
+} else {
+  console.warn("[Build] No convexUrl provided - PUBLIC_CONVEX_URL not set");
 }
 
 // Map icon names to actual components
@@ -203,6 +209,7 @@ const iconMap: Record<string, any> = {
         convexUrl ? (
           await (async () => {
             try {
+              console.log(`[Build] Fetching featured prompts from: ${convexUrl}`);
               const response = await fetch(`${convexUrl}/api/query`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -216,6 +223,7 @@ const iconMap: Record<string, any> = {
               const initialPrompts = (json.value?.prompts || [])
                 .filter((p: any) => p.featured)
                 .slice(0, 6);
+              console.log(`[Build] Fetched ${initialPrompts.length} featured prompts`);
               return (
                 <FeaturedPrompts
                   client:load
@@ -224,6 +232,7 @@ const iconMap: Record<string, any> = {
                 />
               );
             } catch (e) {
+              console.error("[Build] Error fetching featured prompts:", e);
               return <FeaturedPrompts client:load convexUrl={convexUrl} />;
             }
           })()
