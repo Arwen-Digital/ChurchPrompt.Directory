@@ -3,10 +3,10 @@
 # In Dokploy, ensure variables are not marked as "secrets" or "runtime-only"
 
 [phases.setup]
-nixPkgs = ["nodejs_20", "curl", "jq"]
+nixPkgs = ["nodejs_22", "curl", "jq"]
 
 [phases.install]
-cmds = ["npm ci"]
+cmds = ["npm ci --legacy-peer-deps"]
 
 [phases.build]
 # Explicitly use environment variables during build
