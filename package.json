@@ -15,9 +15,9 @@
     "migrate:seed": "node scripts/migrate.mjs"
   },
   "dependencies": {
-    "@astrojs/db": "^0.18.2",
-    "@astrojs/node": "^9.5.1",
-    "@astrojs/react": "^4.4.2",
+    "@astrojs/db": "^0.20.1",
+    "@astrojs/node": "^10.0.5",
+    "@astrojs/react": "^5.0.3",
     "@astrojs/tailwind": "^6.0.2",
     "@clerk/astro": "^2.16.0",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -26,7 +26,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
-    "astro": "^5.15.9",
+    "astro": "^6.1.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "convex": "^1.13.1",
@@ -50,7 +50,7 @@
   "author": "",
   "license": "ISC",
   "engines": {
-    "node": ">=18.20.8"
+    "node": ">=22.0.0"
   },
   "devDependencies": {
     "fast-check": "^3.16.0",
