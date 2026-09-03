@@ -25,7 +25,7 @@ npx convex deploy              # Deploy Convex backend functions
 
 ## 2. Project Architecture Overview
 
-- **Framework**: Astro v5 (hybrid SSR/SSG) + React 19 islands (`client:load`)
+- **Framework**: Astro v7 (hybrid SSR/SSG) + React 19 islands (`client:load`)
 - **Backend**: Convex (serverless real-time DB + functions)
 - **Auth**: Clerk via `@clerk/astro` with middleware protection
 - **Styling**: TailwindCSS v3 + Radix UI primitives + CSS variables

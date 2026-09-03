@@ -61,6 +61,37 @@ const dynamicDescription = categoryName
   : searchParam
     ? `Find AI prompts for "${searchParam}" - Browse ChatGPT prompts and AI tools for church ministry, pastoral care, and faith-based content. Free prompt library.`
     : description;
+
+const siteUrl = Astro.site;
+const structuredData = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: dynamicTitle,
+  description: dynamicDescription,
+  url: canonicalURL,
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Church Prompt Directory",
+    url: siteUrl,
+  },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Directory",
+        item: canonicalURL,
+      },
+    ],
+  },
+});
 ---
 
 <MainLayout title={dynamicTitle} description={dynamicDescription}>
@@ -114,35 +145,7 @@ const dynamicDescription = categoryName
     <!-- JSON-LD Structured Data -->
     <script
       type="application/ld+json"
-      set:html={JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        name: dynamicTitle,
-        description: dynamicDescription,
-        url: canonicalURL,
-        isPartOf: {
-          "@type": "WebSite",
-          name: "Church Prompt Directory",
-          url: Astro.site,
-        },
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: Astro.site,
-            },
-            {
-              "@type": "ListItem",
-              position: 2,
-              name: "Directory",
-              item: canonicalURL,
-            },
-          ],
-        },
-      })}
+      set:html={structuredData}
     />
   </Fragment>
 

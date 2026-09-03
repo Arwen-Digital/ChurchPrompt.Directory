@@ -1,8 +1,14 @@
 ---
 import MainLayout from '@/layouts/MainLayout.astro';
 import { ProfileWithProvider } from '@/components/profile/ProfileWithProvider';
+import { requireSignIn } from '@/lib/auth';
 
 export const prerender = false;
+
+const signInResponse = requireSignIn(Astro);
+if (signInResponse) {
+  return signInResponse;
+}
 
 const convexUrl = import.meta.env.PUBLIC_CONVEX_URL;
 ---

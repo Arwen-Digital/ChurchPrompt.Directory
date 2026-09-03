@@ -38,6 +38,67 @@ if (promptData) {
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const siteUrl = Astro.site;
+const structuredData = promptData
+  ? JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": promptData.title,
+      "description": description,
+      "author": {
+        "@type": "Person",
+        "name": promptData.authorName
+      },
+      "datePublished": new Date(promptData.createdAt).toISOString(),
+      "dateModified": new Date(promptData.updatedAt).toISOString(),
+      "publisher": {
+        "@type": "Organization",
+        "name": "Church Prompt Directory",
+        "url": siteUrl
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": canonicalURL
+      },
+      "keywords": promptData.tags.join(', '),
+      "articleSection": promptData.category,
+      "interactionStatistic": [
+        {
+          "@type": "InteractionCounter",
+          "interactionType": "https://schema.org/UseAction",
+          "userInteractionCount": promptData.usageCount
+        },
+        {
+          "@type": "InteractionCounter",
+          "interactionType": "https://schema.org/ActivateAction",
+          "userInteractionCount": promptData.executionCount
+        }
+      ],
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": siteUrl
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Directory",
+            "item": new URL('/directory', siteUrl)
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": promptData.title,
+            "item": canonicalURL
+          }
+        ]
+      }
+    })
+  : null;
 ---
 
 <MainLayout title={title} description={description}>
@@ -79,64 +140,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
         <meta name="twitter:label2" content="Reading time" />
         <meta name="twitter:data2" content="2 min read" />
         <!-- JSON-LD Structured Data -->
-        <script type="application/ld+json" set:html={JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Article",
-          "headline": promptData.title,
-          "description": description,
-          "author": {
-            "@type": "Person",
-            "name": promptData.authorName
-          },
-          "datePublished": new Date(promptData.createdAt).toISOString(),
-          "dateModified": new Date(promptData.updatedAt).toISOString(),
-          "publisher": {
-            "@type": "Organization",
-            "name": "Church Prompt Directory",
-            "url": Astro.site
-          },
-          "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": canonicalURL
-          },
-          "keywords": promptData.tags.join(', '),
-          "articleSection": promptData.category,
-          "interactionStatistic": [
-            {
-              "@type": "InteractionCounter",
-              "interactionType": "https://schema.org/UseAction",
-              "userInteractionCount": promptData.usageCount
-            },
-            {
-              "@type": "InteractionCounter",
-              "interactionType": "https://schema.org/ActivateAction",
-              "userInteractionCount": promptData.executionCount
-            }
-          ],
-          "breadcrumb": {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              {
-                "@type": "ListItem",
-                "position": 1,
-                "name": "Home",
-                "item": Astro.site
-              },
-              {
-                "@type": "ListItem",
-                "position": 2,
-                "name": "Directory",
-                "item": new URL('/directory', Astro.site)
-              },
-              {
-                "@type": "ListItem",
-                "position": 3,
-                "name": promptData.title,
-                "item": canonicalURL
-              }
-            ]
-          }
-        })} />
+        <script type="application/ld+json" set:html={structuredData} />
       </>
     )}
   </Fragment>

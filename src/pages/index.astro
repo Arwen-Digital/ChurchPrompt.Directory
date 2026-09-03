@@ -55,6 +55,34 @@ if (convexUrl) {
   console.warn("[Build] No convexUrl provided - PUBLIC_CONVEX_URL not set");
 }
 
+const siteUrl = Astro.site;
+const structuredData = JSON.stringify([
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Church Prompt Directory",
+    url: siteUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteUrl}directory?search={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Church Prompt Directory",
+    url: siteUrl,
+    logo: `${siteUrl}logo.png`,
+    sameAs: [
+      "https://twitter.com/ChurchPrompts",
+    ],
+  },
+]);
+
 // Map icon names to actual components
 const iconMap: Record<string, any> = {
   BookOpen,
@@ -74,33 +102,7 @@ const iconMap: Record<string, any> = {
   <Fragment slot="head">
     <script
       type="application/ld+json"
-      set:html={JSON.stringify([
-        {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          name: "Church Prompt Directory",
-          url: Astro.site,
-          potentialAction: {
-            "@type": "SearchAction",
-            target: {
-              "@type": "EntryPoint",
-              urlTemplate: `${Astro.site}directory?search={search_term_string}`,
-            },
-            "query-input": "required name=search_term_string",
-          },
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          name: "Church Prompt Directory",
-          url: Astro.site,
-          logo: `${Astro.site}logo.png`,
-          sameAs: [
-            "https://twitter.com/ChurchPrompts",
-            // Add other social profiles here
-          ],
-        },
-      ])}
+      set:html={structuredData}
     />
   </Fragment>
   <!-- Hero Section -->
